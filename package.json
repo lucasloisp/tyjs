@@ -1,0 +1,23 @@
+{
+  "name": "tyjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "minimist": "^1.2.5",
+    "moo": "^0.5.1",
+    "nearley": "^2.20.1"
+  },
+  "devDependencies": {
+    "jest": "^27.0.2",
+    "prettier": "^2.3.0"
+  },
+  "scripts": {
+    "test": "jest",
+    "format": "prettier --write '**/*.js'",
+    "tdd": "jest --watchAll",
+    "grammar": "nearleyc grammar.ne -o grammar.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
