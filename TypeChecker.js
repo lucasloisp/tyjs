@@ -10,7 +10,7 @@ class Type {
 
     checks(value) {
         const typeIMatch = this.typeTree.type;
-        return typeof value === typeIMatch;
+        return typeIMatch === 'any' || typeof value === typeIMatch;
     }
 }
 
