@@ -55,6 +55,14 @@ describe("the type checker", () => {
             expect(functionType.checks(function oneWithAName() { return 0; })).toBe(true);
             expect(functionType.checks(1)).toBe(false);
         })
+        test("the void type matches voids", () => {
+            const voidType = type("void");
+            expect(voidType.checks(null)).toBe(true);
+            expect(voidType.checks(undefined)).toBe(true);
+            expect(voidType.checks(0)).toBe(false);
+            expect(voidType.checks("")).toBe(false);
+            expect(voidType.checks(NaN)).toBe(false);
+        })
 
     });
 });

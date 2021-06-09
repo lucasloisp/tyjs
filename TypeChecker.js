@@ -10,6 +10,9 @@ class Type {
 
     checks(value) {
         const typeIMatch = this.typeTree.type;
+        if (typeIMatch === 'void') {
+            return value === null || value === undefined;
+        }
         return typeIMatch === 'any' || typeof value === typeIMatch;
     }
 }
