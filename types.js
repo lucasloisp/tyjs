@@ -54,6 +54,10 @@ function anyType() {
   return Object.freeze({ type: "any" });
 }
 
+function not(type) {
+  return Object.freeze({ type: "not", left: type });
+}
+
 module.exports = {
   undefinedType,
   booleanType,
@@ -69,4 +73,5 @@ module.exports = {
   charType,
   byteType,
   anyType,
+  not
 };
