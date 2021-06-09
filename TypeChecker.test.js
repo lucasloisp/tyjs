@@ -14,5 +14,12 @@ describe("the type checker", () => {
             expect(booleanType.checks(false)).toBe(true);
             expect(booleanType.checks(1)).toBe(false);
         })
+        test("the sybmol type matches all symbols", () => {
+            const symbolType = type("symbol");
+            expect(symbolType.checks(Symbol())).toBe(true);
+            expect(symbolType.checks(Symbol("hello"))).toBe(true);
+            expect(symbolType.checks("hello")).toBe(false);
+        })
+
     });
 });
