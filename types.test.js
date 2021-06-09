@@ -26,5 +26,23 @@ describe("the types in TyJS", () => {
         test("the bigint type", () => {
             expect(ty.bigintType()).toEqual({type: 'bigint'});
         });
+        test("the void type", () => {
+            expect(ty.voidType()).toEqual({type: 'void'});
+        });
+        test("the int type", () => {
+            expect(ty.intType()).toEqual({type: 'int'});
+        });
+        test("the double type", () => {
+            expect(ty.doubleType()).toEqual({type: 'double'});
+        });
+        test("the char type", () => {
+            expect(ty.charType()).toEqual({type: 'char'});
+        });
+        test("the byte type", () => {
+            expect(ty.byteType()).toEqual({type: 'byte'});
+        });
+        test("the any type", () => {
+            expect(ty.anyType()).toEqual({type: 'any'});
+        });
     });
 });

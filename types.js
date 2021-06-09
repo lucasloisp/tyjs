@@ -31,6 +31,30 @@ function bigintType() {
     return Object.freeze({ type: 'bigint'})
 }
 
+function voidType() {
+    return Object.freeze({ type: 'void' })
+}
+
+function intType() {
+    return Object.freeze({ type: 'int' })
+}
+
+function doubleType() {
+    return Object.freeze({ type: 'double' })
+}
+
+function charType() {
+    return Object.freeze({ type: 'char' })
+}
+
+function byteType() {
+    return Object.freeze({ type: 'byte' })
+}
+
+function anyType() {
+    return Object.freeze({ type: 'any' })
+}
+
 module.exports = {
     undefinedType,
     booleanType,
@@ -40,4 +64,10 @@ module.exports = {
     symbolType,
     objectType,
     bigintType,
+    voidType,
+    intType,
+    doubleType,
+    charType,
+    byteType,
+    anyType
 }
