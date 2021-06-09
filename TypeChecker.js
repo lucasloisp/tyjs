@@ -14,6 +14,8 @@ class Type {
             return value === null || value === undefined;
         } else if (typeIMatch === 'int') {
             return Number.isInteger(value);
+        } else if (typeIMatch === 'double') {
+            return typeof value === 'number' && !Number.isInteger(value)
         }
         return typeIMatch === 'any' || typeof value === typeIMatch;
     }

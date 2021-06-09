@@ -73,6 +73,19 @@ describe("the type checker", () => {
             expect(intType.checks(0)).toBe(true);
             expect(intType.checks(-1)).toBe(true);
             expect(intType.checks(-1.4)).toBe(false);
+            expect(intType.checks(null)).toBe(false)
+        })
+        test("the double type matches double precision floating point numbers", () => {
+            const doubleType = type("double");
+            expect(doubleType.checks(1)).toBe(false);
+            expect(doubleType.checks(1.1)).toBe(true);
+            expect(doubleType.checks(NaN)).toBe(true);
+            expect(doubleType.checks(Infinity)).toBe(true);
+            expect(doubleType.checks(-Infinity)).toBe(true);
+            expect(doubleType.checks(0)).toBe(false);
+            expect(doubleType.checks(-1)).toBe(false);
+            expect(doubleType.checks(-1.4)).toBe(true);
+            expect(doubleType.checks(null)).toBe(false)
         })
 
     });
