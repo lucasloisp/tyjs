@@ -4,9 +4,7 @@
 // Type.static.classChecker(clase, valFunction)
 // Type.classChecker(clase, valFunction)
 
-
 // NOT REAL:
-const type = require('tyjs')
+const type = require("tyjs");
 
-
-const threeDigitNumberType = type("number & /\d{3}/")
+const threeDigitNumberType = type("number & /d{3}/");
