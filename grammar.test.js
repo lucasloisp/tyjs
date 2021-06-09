@@ -31,6 +31,28 @@ describe("the language's grammar", () => {
       expectToUnambiguouslyEvaluateTo("char", ty.charType());
       expectToUnambiguouslyEvaluateTo("byte", ty.byteType());
       expectToUnambiguouslyEvaluateTo("any", ty.anyType());
+      expectToUnambiguouslyEvaluateTo("_", ty.anyType());
     });
   });
+  describe("the operators", () => {
+    describe("the not operator", () => {
+      test("parses the negation of an atomic type", () => {
+        expectToUnambiguouslyEvaluateTo("!undefined", ty.not(ty.undefinedType()));
+        expectToUnambiguouslyEvaluateTo("!boolean", ty.not(ty.booleanType()));
+        expectToUnambiguouslyEvaluateTo("!number", ty.not(ty.numberType()));
+        expectToUnambiguouslyEvaluateTo("!string", ty.not(ty.stringType()));
+        expectToUnambiguouslyEvaluateTo("!function", ty.not(ty.functionType()));
+        expectToUnambiguouslyEvaluateTo("!symbol", ty.not(ty.symbolType()));
+        expectToUnambiguouslyEvaluateTo("!object", ty.not(ty.objectType()));
+        expectToUnambiguouslyEvaluateTo("!bigint", ty.not(ty.bigintType()));
+        expectToUnambiguouslyEvaluateTo("!void", ty.not(ty.voidType()));
+        expectToUnambiguouslyEvaluateTo("!int", ty.not(ty.intType()));
+        expectToUnambiguouslyEvaluateTo("!double", ty.not(ty.doubleType()));
+        expectToUnambiguouslyEvaluateTo("!char", ty.not(ty.charType()));
+        expectToUnambiguouslyEvaluateTo("!byte", ty.not(ty.byteType()));
+        expectToUnambiguouslyEvaluateTo("!any", ty.not(ty.anyType()));
+        expectToUnambiguouslyEvaluateTo("!_", ty.not(ty.anyType()));
+      })
+    })
+  })
 });

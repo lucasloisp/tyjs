@@ -1,6 +1,7 @@
 const moo = require("moo");
 
 module.exports = moo.compile({
+  Not: ["!"],
   Undefined: ["undefined"],
   Boolean: ["boolean"],
   Number: ["number"],
