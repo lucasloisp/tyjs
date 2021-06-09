@@ -12,6 +12,8 @@ class Type {
         const typeIMatch = this.typeTree.type;
         if (typeIMatch === 'void') {
             return value === null || value === undefined;
+        } else if (typeIMatch === 'int') {
+            return Number.isInteger(value);
         }
         return typeIMatch === 'any' || typeof value === typeIMatch;
     }

@@ -55,13 +55,24 @@ describe("the type checker", () => {
             expect(functionType.checks(function oneWithAName() { return 0; })).toBe(true);
             expect(functionType.checks(1)).toBe(false);
         })
-        test("the void type matches voids", () => {
+        test("the void type matches null or undefined", () => {
             const voidType = type("void");
             expect(voidType.checks(null)).toBe(true);
             expect(voidType.checks(undefined)).toBe(true);
             expect(voidType.checks(0)).toBe(false);
             expect(voidType.checks("")).toBe(false);
             expect(voidType.checks(NaN)).toBe(false);
+        });
+        test("the int type matches whole numbers", () => {
+            const intType = type("int");
+            expect(intType.checks(1)).toBe(true);
+            expect(intType.checks(1.1)).toBe(false);
+            expect(intType.checks(NaN)).toBe(false);
+            expect(intType.checks(Infinity)).toBe(false);
+            expect(intType.checks(-Infinity)).toBe(false);
+            expect(intType.checks(0)).toBe(true);
+            expect(intType.checks(-1)).toBe(true);
+            expect(intType.checks(-1.4)).toBe(false);
         })
 
     });
