@@ -18,6 +18,8 @@ class Type {
             return typeof value === 'number' && !Number.isInteger(value)
         } else if (typeIMatch === 'char') {
             return typeof value === 'string' && value.length === 1
+        } else if (typeIMatch === 'byte') {
+            return Number.isInteger(value) && value >= 0 && value <= 255
         }
         return typeIMatch === 'any' || typeof value === typeIMatch;
     }

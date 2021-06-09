@@ -94,6 +94,15 @@ describe("the type checker", () => {
             expect(charType.checks([1])).toBe(false);
             expect(charType.checks('🙆')).toBe(false);
         })
+        test("the byte type matches numbers from 0 to 255", () => {
+            const byteType = type("byte");
+            for (let i = 0; i <= 255; i++) {
+                expect(byteType.checks(i)).toBe(true);
+            }
+            expect(byteType.checks(-0)).toBe(true);
+            expect(byteType.checks(256)).toBe(false);
+            expect(byteType.checks(1.2)).toBe(false);
+        })
 
     });
 });
