@@ -1,5 +1,4 @@
 const type = require("./TypeChecker.js");
-const ty = require("./types");
 
 describe("the type checker", () => {
   describe("checking for atomic types", () => {
