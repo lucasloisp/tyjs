@@ -87,6 +87,13 @@ describe("the type checker", () => {
             expect(doubleType.checks(-1.4)).toBe(true);
             expect(doubleType.checks(null)).toBe(false)
         })
+        test("the char type matches single character strings", () => {
+            const charType = type("char");
+            expect(charType.checks('a')).toBe(true);
+            expect(charType.checks('')).toBe(false);
+            expect(charType.checks([1])).toBe(false);
+            expect(charType.checks('🙆')).toBe(false);
+        })
 
     });
 });
