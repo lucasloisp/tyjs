@@ -32,6 +32,5 @@ describe("the language's grammar", () => {
             expectToUnambiguouslyEvaluateTo("byte", ty.byteType());
             expectToUnambiguouslyEvaluateTo("any", ty.anyType());
         });
-        // expectToUnambiguouslyEvaluateTo("bigint", ty.bigintType());
     });
 });
