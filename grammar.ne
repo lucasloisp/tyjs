@@ -7,7 +7,7 @@ const ty = require('./types');
 %}
 @lexer lexer
 NEG ->
-    %Not ATOMIC {% ([_, snd]) => ty.not(snd) %}
+    %Not NEG {% ([_, snd]) => ty.not(snd) %}
   | ATOMIC {% ([fst]) => fst %}
 ATOMIC ->
     %Undefined {% () => ty.undefinedType() %}

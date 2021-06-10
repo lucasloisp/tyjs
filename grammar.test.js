@@ -14,6 +14,12 @@ function expectToUnambiguouslyEvaluateTo(string, value) {
   expect(parseResult).toContainEqual(value);
 }
 
+function expectToBeASyntaxError(string) {
+  const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
+  let { results: parseResult } = parser.feed(string);
+  expect(parseResult.length).toBe(0);
+}
+
 describe("the language's grammar", () => {
   describe("the atomic types", () => {
     test("parses the atomic types", () => {
@@ -52,7 +58,15 @@ describe("the language's grammar", () => {
         expectToUnambiguouslyEvaluateTo("!byte", ty.not(ty.byteType()));
         expectToUnambiguouslyEvaluateTo("!any", ty.not(ty.anyType()));
         expectToUnambiguouslyEvaluateTo("!_", ty.not(ty.anyType()));
-      })
+      });
+      test("parses a double and triple negation", () => {
+        expectToUnambiguouslyEvaluateTo("!!undefined", ty.not(ty.not(ty.undefinedType())));
+        expectToUnambiguouslyEvaluateTo("!!!undefined", ty.not(ty.not(ty.not(ty.undefinedType()))));
+      });
+      test("you need a type to be negated", () => {
+        expectToBeASyntaxError("!");
+        expectToBeASyntaxError("!!");
+      });
     })
   })
 });
