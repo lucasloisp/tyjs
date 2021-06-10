@@ -48,8 +48,11 @@ describe("the types in TyJS", () => {
   describe("the type operators", () => {
     describe("the not operator", () => {
       test("it has a reference to another type", () => {
-        expect(ty.not(ty.undefinedType())).toEqual({ type: "not", left: ty.undefinedType()});
-      })
-    })
+        expect(ty.not(ty.undefinedType())).toEqual({
+          type: "not",
+          left: ty.undefinedType(),
+        });
+      });
+    });
   });
 });

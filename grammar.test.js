@@ -43,7 +43,10 @@ describe("the language's grammar", () => {
   describe("the operators", () => {
     describe("the not operator", () => {
       test("parses the negation of an atomic type", () => {
-        expectToUnambiguouslyEvaluateTo("!undefined", ty.not(ty.undefinedType()));
+        expectToUnambiguouslyEvaluateTo(
+          "!undefined",
+          ty.not(ty.undefinedType())
+        );
         expectToUnambiguouslyEvaluateTo("!boolean", ty.not(ty.booleanType()));
         expectToUnambiguouslyEvaluateTo("!number", ty.not(ty.numberType()));
         expectToUnambiguouslyEvaluateTo("!string", ty.not(ty.stringType()));
@@ -60,13 +63,19 @@ describe("the language's grammar", () => {
         expectToUnambiguouslyEvaluateTo("!_", ty.not(ty.anyType()));
       });
       test("parses a double and triple negation", () => {
-        expectToUnambiguouslyEvaluateTo("!!undefined", ty.not(ty.not(ty.undefinedType())));
-        expectToUnambiguouslyEvaluateTo("!!!undefined", ty.not(ty.not(ty.not(ty.undefinedType()))));
+        expectToUnambiguouslyEvaluateTo(
+          "!!undefined",
+          ty.not(ty.not(ty.undefinedType()))
+        );
+        expectToUnambiguouslyEvaluateTo(
+          "!!!undefined",
+          ty.not(ty.not(ty.not(ty.undefinedType())))
+        );
       });
       test("you need a type to be negated", () => {
         expectToBeASyntaxError("!");
         expectToBeASyntaxError("!!");
       });
-    })
-  })
+    });
+  });
 });

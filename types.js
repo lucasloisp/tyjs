@@ -73,5 +73,5 @@ module.exports = {
   charType,
   byteType,
   anyType,
-  not
+  not,
 };
