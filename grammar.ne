@@ -1,7 +1,6 @@
 @{%
 const moo = require('moo');
 const lexer = require('./lex');
-const functions = require('./functions');
 const ty = require('./types');
 
 %}
