@@ -10,13 +10,15 @@
   },
   "devDependencies": {
     "jest": "^27.0.2",
+    "onchange": "^7.1.0",
     "prettier": "^2.3.0"
   },
   "scripts": {
     "test": "jest",
     "format": "prettier --write '**/*.js'",
     "tdd": "jest --watchAll",
-    "grammar": "nearleyc grammar.ne -o grammar.js"
+    "grammar": "nearleyc grammar.ne -o grammar.js",
+    "grammar-watch": "onchange 'grammar.ne' -- npm run grammar"
   },
   "author": "",
   "license": "ISC"
