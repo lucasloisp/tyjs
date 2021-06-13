@@ -1,26 +1,26 @@
-const type = require("./TypeChecker.js");
+const Type = require("./TypeChecker.js");
 
 describe("the type checker", () => {
   describe("checking for atomic types", () => {
     test("the undefined type only matches the undefined value", () => {
-      const undefinedType = type("undefined");
+      const undefinedType = new Type("undefined");
       expect(undefinedType.checks(undefined)).toBe(true);
       expect(undefinedType.checks(1)).toBe(false);
     });
     test("the boolean type matches boolean values", () => {
-      const booleanType = type("boolean");
+      const booleanType = new Type("boolean");
       expect(booleanType.checks(true)).toBe(true);
       expect(booleanType.checks(false)).toBe(true);
       expect(booleanType.checks(1)).toBe(false);
     });
     test("the symbol type matches all symbols", () => {
-      const symbolType = type("symbol");
+      const symbolType = new Type("symbol");
       expect(symbolType.checks(Symbol())).toBe(true);
       expect(symbolType.checks(Symbol("hello"))).toBe(true);
       expect(symbolType.checks("hello")).toBe(false);
     });
     test("the number type matches all numbers", () => {
-      const numberType = type("number");
+      const numberType = new Type("number");
       expect(numberType.checks(1)).toBe(true);
       expect(numberType.checks(1.3)).toBe(true);
       expect(numberType.checks(1.3e12)).toBe(true);
@@ -28,14 +28,14 @@ describe("the type checker", () => {
       expect(numberType.checks("hello")).toBe(false);
     });
     test("the any type matches all possible values", () => {
-      const anyType = type("any");
+      const anyType = new Type("any");
       expect(anyType.checks(Symbol())).toBe(true);
       expect(anyType.checks(Symbol("hello"))).toBe(true);
       expect(anyType.checks(123123)).toBe(true);
       expect(anyType.checks("hello")).toBe(true);
     });
     test("the big int type matches Big Int values", () => {
-      const bigIntType = type("bigint");
+      const bigIntType = new Type("bigint");
       expect(bigIntType.checks(1n)).toBe(true);
       expect(bigIntType.checks(1)).toBe(false);
       expect(bigIntType.checks(BigInt(1))).toBe(true);
@@ -48,7 +48,7 @@ describe("the type checker", () => {
       expect(bigIntType.checks(Number.MAX_VALUE + 1)).toBe(false);
     });
     test("the function type matches functions", () => {
-      const functionType = type("function");
+      const functionType = new Type("function");
       expect(functionType.checks(() => 0)).toBe(true);
       expect(
         functionType.checks(function () {
@@ -63,7 +63,7 @@ describe("the type checker", () => {
       expect(functionType.checks(1)).toBe(false);
     });
     test("the void type matches null or undefined", () => {
-      const voidType = type("void");
+      const voidType = new Type("void");
       expect(voidType.checks(null)).toBe(true);
       expect(voidType.checks(undefined)).toBe(true);
       expect(voidType.checks(0)).toBe(false);
@@ -71,7 +71,7 @@ describe("the type checker", () => {
       expect(voidType.checks(NaN)).toBe(false);
     });
     test("the int type matches whole numbers", () => {
-      const intType = type("int");
+      const intType = new Type("int");
       expect(intType.checks(1)).toBe(true);
       expect(intType.checks(1.1)).toBe(false);
       expect(intType.checks(NaN)).toBe(false);
@@ -83,7 +83,7 @@ describe("the type checker", () => {
       expect(intType.checks(null)).toBe(false);
     });
     test("the double type matches double precision floating point numbers", () => {
-      const doubleType = type("double");
+      const doubleType = new Type("double");
       expect(doubleType.checks(1)).toBe(false);
       expect(doubleType.checks(1.1)).toBe(true);
       expect(doubleType.checks(NaN)).toBe(true);
@@ -95,14 +95,14 @@ describe("the type checker", () => {
       expect(doubleType.checks(null)).toBe(false);
     });
     test("the char type matches single character strings", () => {
-      const charType = type("char");
+      const charType = new Type("char");
       expect(charType.checks("a")).toBe(true);
       expect(charType.checks("")).toBe(false);
       expect(charType.checks([1])).toBe(false);
       expect(charType.checks("🙆")).toBe(false);
     });
     test("the byte type matches numbers from 0 to 255", () => {
-      const byteType = type("byte");
+      const byteType = new Type("byte");
       for (let i = 0; i <= 255; i++) {
         expect(byteType.checks(i)).toBe(true);
       }

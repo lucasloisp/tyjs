@@ -25,8 +25,4 @@ class Type {
   }
 }
 
-function type(typeDescription) {
-  return new Type(typeDescription);
-}
-
-module.exports = type;
+module.exports = Type;
