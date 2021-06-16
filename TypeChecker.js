@@ -21,14 +21,13 @@ class Type {
     } else if (typeIMatch === "byte") {
       return Number.isInteger(value) && value >= 0 && value <= 255;
     } else if (typeIMatch === "not") {
-      return !this._checkType(typeTree.left, value)
+      return !this._checkType(typeTree.left, value);
     }
-    return typeIMatch === "any" || typeof value === typeIMatch;
+    return typeIMatch === "any" || typeTree.match(value);
   }
 
   checks(value) {
-    return this._checkType(this.typeTree, value)
-
+    return this._checkType(this.typeTree, value);
   }
 }
 

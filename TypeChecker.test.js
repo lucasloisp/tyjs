@@ -117,13 +117,13 @@ describe("the type checker", () => {
         const notAnyType = new Type("!any");
         expect(notAnyType.checks(1)).toBe(false);
         expect(notAnyType.checks(2)).toBe(false);
-        expect(notAnyType.checks('hello')).toBe(false);
+        expect(notAnyType.checks("hello")).toBe(false);
       });
       test("it matches all values but null tand undefined when you negate void", () => {
         const notVoidType = new Type("!void");
         expect(notVoidType.checks(1)).toBe(true);
         expect(notVoidType.checks(null)).toBe(false);
       });
-    })
-  })
+    });
+  });
 });

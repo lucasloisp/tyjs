@@ -1,61 +1,73 @@
+function matchValueBasedOnTypeof(value) {
+  return typeof value === this.type
+}
+
+function typeCreator({ type, left, match }) {
+  return Object.freeze({
+    type,
+    left,
+    match: match || matchValueBasedOnTypeof,
+  });
+}
+
 function undefinedType() {
-  return Object.freeze({ type: "undefined" });
+  return typeCreator({ type: "undefined" });
 }
 
 function booleanType() {
-  return Object.freeze({ type: "boolean" });
+  return typeCreator({ type: "boolean" });
 }
 
 function numberType() {
-  return Object.freeze({ type: "number" });
+  return typeCreator({ type: "number" });
 }
 
 function stringType() {
-  return Object.freeze({ type: "string" });
+  return typeCreator({ type: "string" });
 }
 
 function functionType() {
-  return Object.freeze({ type: "function" });
+  return typeCreator({ type: "function" });
 }
 
 function symbolType() {
-  return Object.freeze({ type: "symbol" });
+  return typeCreator({ type: "symbol" });
 }
 
 function objectType() {
-  return Object.freeze({ type: "object" });
+  return typeCreator({ type: "object" });
 }
 
 function bigintType() {
-  return Object.freeze({ type: "bigint" });
+  return typeCreator({ type: "bigint" });
 }
 
 function voidType() {
-  return Object.freeze({ type: "void" });
+  return typeCreator({ type: "void" });
 }
 
 function intType() {
-  return Object.freeze({ type: "int" });
+  return typeCreator({ type: "int" });
 }
 
 function doubleType() {
-  return Object.freeze({ type: "double" });
+  return typeCreator({ type: "double" });
 }
 
 function charType() {
-  return Object.freeze({ type: "char" });
+  return typeCreator({ type: "char" });
 }
 
 function byteType() {
-  return Object.freeze({ type: "byte" });
+  return typeCreator({ type: "byte" });
 }
 
 function anyType() {
-  return Object.freeze({ type: "any" });
+  return typeCreator({ type: "any" });
 }
 
 function not(type) {
-  return Object.freeze({ type: "not", left: type });
+  return typeCreator({ type: "not", left: type });
 }
 
 module.exports = {
