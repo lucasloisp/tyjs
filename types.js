@@ -94,8 +94,17 @@ function not(type) {
   return typeCreator({ type: "not", left: type, match: matchesNotType });
 }
 
+function matchesAnd(value) {
+  return this.left.match(value) && this.right.match(value);
+}
+
 function and(typeL, typeR) {
-  return typeCreator({ type: "and", left: typeL, right: typeR });
+  return typeCreator({
+    type: "and",
+    left: typeL,
+    right: typeR,
+    match: matchesAnd,
+  });
 }
 
 module.exports = {

@@ -127,15 +127,25 @@ describe("the type checker", () => {
     });
     describe("the and operator", () => {
       test("it matches values that are in both atomic types", () => {
-        const notAnyType = new Type("!any");
-        expect(notAnyType.checks(1)).toBe(false);
-        expect(notAnyType.checks(2)).toBe(false);
-        expect(notAnyType.checks("hello")).toBe(false);
+        const byteAndInt = new Type("byte & int");
+        for (let i = 0; i <= 255; i++) {
+          expect(byteAndInt.checks(i)).toBe(true);
+        }
+        expect(byteAndInt.checks(-1)).toBe(false);
+        expect(byteAndInt.checks(256)).toBe(false);
       });
-      test("it matches all values but null and undefined when you negate void", () => {
-        const notVoidType = new Type("!void");
-        expect(notVoidType.checks(1)).toBe(true);
-        expect(notVoidType.checks(null)).toBe(false);
+      test("it matches no values when adding two disjoint types", () => {
+        const booleanAndNumber = new Type("boolean & number");
+        expect(booleanAndNumber.checks(1)).toBe(false);
+        expect(booleanAndNumber.checks(true)).toBe(false);
+      });
+      test("it works with the conjunction of negated types", () => {
+        const intAndNotByte = new Type("int & !byte");
+        expect(intAndNotByte.checks(-1)).toBe(true);
+        expect(intAndNotByte.checks(0)).toBe(false);
+        expect(intAndNotByte.checks(10)).toBe(false);
+        expect(intAndNotByte.checks(255)).toBe(false);
+        expect(intAndNotByte.checks(256)).toBe(true);
       });
     });
   });
