@@ -8,8 +8,8 @@ class Type {
     this.typeTree = parseResult[0];
   }
 
-  checks(value) {
-    const typeIMatch = this.typeTree.type;
+  _checkType(typeTree, value) {
+    const typeIMatch = typeTree.type;
     if (typeIMatch === "void") {
       return value === null || value === undefined;
     } else if (typeIMatch === "int") {
@@ -20,8 +20,15 @@ class Type {
       return typeof value === "string" && value.length === 1;
     } else if (typeIMatch === "byte") {
       return Number.isInteger(value) && value >= 0 && value <= 255;
+    } else if (typeIMatch === "not") {
+      return !this._checkType(typeTree.left, value)
     }
     return typeIMatch === "any" || typeof value === typeIMatch;
+  }
+
+  checks(value) {
+    return this._checkType(this.typeTree, value)
+
   }
 }
 
