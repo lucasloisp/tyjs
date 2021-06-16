@@ -143,5 +143,37 @@ describe("the language's grammar", () => {
         );
       });
     });
+    describe("the minus operator", () => {
+      test("parses the difference of two atomic types", () => {
+        expectToUnambiguouslyEvaluateTo(
+          "number - int",
+          ty.and(ty.numberType(), ty.not(ty.intType()))
+        );
+        expectToUnambiguouslyEvaluateTo(
+          "number - !int",
+          ty.and(ty.numberType(), ty.not(ty.not(ty.intType())))
+        );
+      });
+      test("it works with conjunctions and disjunctions", () => {
+        expectToUnambiguouslyEvaluateTo(
+          "number - int & string",
+          ty.and(ty.minus(ty.numberType(), ty.intType()), ty.stringType())
+        );
+        expectToUnambiguouslyEvaluateTo(
+          "number | boolean - int & string",
+          ty.and(
+            ty.minus(ty.or(ty.numberType(), ty.booleanType()), ty.intType()),
+            ty.stringType()
+          )
+        );
+        // expectToUnambiguouslyEvaluateTo(
+        //     "number | boolean - int & string",
+        //     ty.and(
+        //         ty.or(ty.numberType(), ty.booleanType()),
+        //         ty.not(ty.and(ty.intType(), ty.stringType()))
+        //     )
+        // )
+      });
+    });
   });
 });

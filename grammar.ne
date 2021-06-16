@@ -10,6 +10,7 @@ const ty = require('./types');
 AND ->
     AND _ %And _ NEG {% ([fst, _, _2, _3, snd]) => ty.and(fst, snd) %}
   | AND _ %Or _ NEG {% ([fst, _, _2, _3, snd]) => ty.or(fst, snd) %}
+  | AND _ %Minus _ NEG {% ([fst, _, _2, _3, snd]) => ty.minus(fst, snd) %}
   | NEG {% ([fst]) => fst %}
 
 NEG ->

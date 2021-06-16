@@ -4,6 +4,7 @@ module.exports = moo.compile({
   Not: ["!"],
   And: ["&"],
   Or: ["|"],
+  Minus: ["-"],
   Undefined: ["undefined"],
   Boolean: ["boolean"],
   Number: ["number"],

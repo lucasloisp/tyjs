@@ -120,6 +120,10 @@ function or(typeL, typeR) {
   });
 }
 
+function minus(typeL, typeR) {
+  return and(typeL, not(typeR));
+}
+
 module.exports = {
   undefinedType,
   booleanType,
@@ -138,4 +142,5 @@ module.exports = {
   not,
   and,
   or,
+  minus,
 };
