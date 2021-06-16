@@ -107,6 +107,19 @@ function and(typeL, typeR) {
   });
 }
 
+function matchesOr(value) {
+  return this.left.match(value) || this.right.match(value);
+}
+
+function or(typeL, typeR) {
+  return typeCreator({
+    type: "or",
+    left: typeL,
+    right: typeR,
+    match: matchesOr,
+  });
+}
+
 module.exports = {
   undefinedType,
   booleanType,
@@ -124,4 +137,5 @@ module.exports = {
   anyType,
   not,
   and,
+  or,
 };

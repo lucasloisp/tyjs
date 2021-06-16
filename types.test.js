@@ -63,5 +63,14 @@ describe("the types in TyJS", () => {
         });
       });
     });
+    describe("the or operator", () => {
+      test("it has a reference to two other types", () => {
+        expect(ty.or(ty.undefinedType(), ty.voidType())).toMatchObject({
+          type: "or",
+          left: ty.undefinedType(),
+          right: ty.voidType(),
+        });
+      });
+    })
   });
 });
