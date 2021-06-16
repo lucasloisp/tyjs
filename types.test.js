@@ -54,5 +54,14 @@ describe("the types in TyJS", () => {
         });
       });
     });
+    describe("the and operator", () => {
+      test("it has a reference to two other types", () => {
+        expect(ty.and(ty.undefinedType(), ty.voidType())).toMatchObject({
+          type: "and",
+          left: ty.undefinedType(),
+          right: ty.voidType(),
+        });
+      });
+    });
   });
 });

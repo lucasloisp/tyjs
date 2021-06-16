@@ -5,6 +5,12 @@ const ty = require('./types');
 
 %}
 @lexer lexer
+@builtin "whitespace.ne"
+
+AND ->
+    AND _ %And _ NEG {% ([fst, _, _2, _3, snd]) => ty.and(fst, snd) %}
+  | NEG {% ([fst]) => fst %}
+
 NEG ->
     %Not NEG {% ([_, snd]) => ty.not(snd) %}
   | ATOMIC {% ([fst]) => fst %}

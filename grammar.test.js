@@ -77,5 +77,35 @@ describe("the language's grammar", () => {
         expectToBeASyntaxError("!!");
       });
     });
+    describe("the and operator", () => {
+      test("parses the conjunction of an atomic type", () => {
+        expectToUnambiguouslyEvaluateTo(
+          "int & number",
+          ty.and(ty.intType(), ty.numberType())
+        );
+      });
+      test("parses the conjunction of an atomic type even with multiple spaces", () => {
+        expectToUnambiguouslyEvaluateTo(
+          "int     &   number",
+          ty.and(ty.intType(), ty.numberType())
+        );
+      });
+      test("interacts with the not operator", () => {
+        expectToUnambiguouslyEvaluateTo(
+          "!int & number",
+          ty.and(ty.not(ty.intType()), ty.numberType())
+        );
+        expectToUnambiguouslyEvaluateTo(
+          "!int & !number",
+          ty.and(ty.not(ty.intType()), ty.not(ty.numberType()))
+        );
+      });
+      test("it associates to the left", () => {
+        expectToUnambiguouslyEvaluateTo(
+          "int & number & string",
+          ty.and(ty.and(ty.intType(), ty.numberType()), ty.stringType())
+        );
+      });
+    });
   });
 });

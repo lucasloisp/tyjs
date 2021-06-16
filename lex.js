@@ -2,6 +2,7 @@ const moo = require("moo");
 
 module.exports = moo.compile({
   Not: ["!"],
+  And: ["&"],
   Undefined: ["undefined"],
   Boolean: ["boolean"],
   Number: ["number"],
@@ -16,4 +17,5 @@ module.exports = moo.compile({
   Char: ["char"],
   Byte: ["byte"],
   Any: ["any", "_"],
+  Whitespace: [" "],
 });

@@ -2,10 +2,10 @@ function matchValueBasedOnTypeof(value) {
   return typeof value === this.type;
 }
 
-function typeCreator({ type, left, match }) {
+function typeCreator({ type, match, ...rest }) {
   return Object.freeze({
+    ...rest,
     type,
-    left,
     match: match || matchValueBasedOnTypeof,
   });
 }
@@ -94,6 +94,10 @@ function not(type) {
   return typeCreator({ type: "not", left: type, match: matchesNotType });
 }
 
+function and(typeL, typeR) {
+  return typeCreator({ type: "and", left: typeL, right: typeR });
+}
+
 module.exports = {
   undefinedType,
   booleanType,
@@ -110,4 +114,5 @@ module.exports = {
   byteType,
   anyType,
   not,
+  and,
 };
