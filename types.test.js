@@ -71,6 +71,6 @@ describe("the types in TyJS", () => {
           right: ty.voidType(),
         });
       });
-    })
+    });
   });
 });

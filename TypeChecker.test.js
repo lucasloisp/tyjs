@@ -148,5 +148,29 @@ describe("the type checker", () => {
         expect(intAndNotByte.checks(256)).toBe(true);
       });
     });
+    describe("the or operator", () => {
+      test("it matches values that are either byte or int or both", () => {
+        const byteOrInt = new Type("byte | int");
+        for (let i = 0; i <= 255; i++) {
+          expect(byteOrInt.checks(i)).toBe(true);
+        }
+        expect(byteOrInt.checks(-1)).toBe(true);
+        expect(byteOrInt.checks(256)).toBe(true);
+        expect(byteOrInt.checks(1.5)).toBe(false);
+      });
+      test("it matches both values when applying it to two primitive types", () => {
+        const booleanOrNumber = new Type("boolean | number");
+        expect(booleanOrNumber.checks(1)).toBe(true);
+        expect(booleanOrNumber.checks(true)).toBe(true);
+      });
+      test("it works with the applying or to negated types", () => {
+        const intOrNotByte = new Type("int | !byte");
+        expect(intOrNotByte.checks(-1)).toBe(true);
+        expect(intOrNotByte.checks(0)).toBe(true);
+        expect(intOrNotByte.checks(10)).toBe(true);
+        expect(intOrNotByte.checks(255)).toBe(true);
+        expect(intOrNotByte.checks(256)).toBe(true);
+      });
+    });
   });
 });

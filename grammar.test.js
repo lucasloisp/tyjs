@@ -107,5 +107,41 @@ describe("the language's grammar", () => {
         );
       });
     });
+    describe("the or operator", () => {
+      test("parses the disjunction of an atomic type", () => {
+        expectToUnambiguouslyEvaluateTo(
+          "int | number",
+          ty.or(ty.intType(), ty.numberType())
+        );
+      });
+      test("parses the disjunction of an atomic type even with multiple spaces", () => {
+        expectToUnambiguouslyEvaluateTo(
+          "int     |  number",
+          ty.or(ty.intType(), ty.numberType())
+        );
+      });
+      test("interacts with the not operator", () => {
+        expectToUnambiguouslyEvaluateTo(
+          "!int | number",
+          ty.or(ty.not(ty.intType()), ty.numberType())
+        );
+        expectToUnambiguouslyEvaluateTo(
+          "!int | !number",
+          ty.or(ty.not(ty.intType()), ty.not(ty.numberType()))
+        );
+      });
+      test("it interacts with the and operator", () => {
+        expectToUnambiguouslyEvaluateTo(
+          "int | number & byte",
+          ty.and(ty.or(ty.intType(), ty.numberType()), ty.byteType())
+        );
+      });
+      test("it associates to the left", () => {
+        expectToUnambiguouslyEvaluateTo(
+          "int | number | string",
+          ty.or(ty.or(ty.intType(), ty.numberType()), ty.stringType())
+        );
+      });
+    });
   });
 });
