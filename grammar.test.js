@@ -176,4 +176,34 @@ describe("the language's grammar", () => {
       });
     });
   });
+  describe("parentheses serve to disambiguate", () => {
+    test("having parentheses on an atomic type is superfluous", () => {
+      expectToUnambiguouslyEvaluateTo("(int)", ty.intType());
+      expectToUnambiguouslyEvaluateTo("((((int))))", ty.intType());
+      expectToUnambiguouslyEvaluateTo("(    int  )", ty.intType());
+      expectToBeASyntaxError("(int");
+    });
+    test("having parentheses around top-level operations is superfluous", () => {
+      expectToUnambiguouslyEvaluateTo("!int", ty.not(ty.intType()));
+      expectToUnambiguouslyEvaluateTo("(!int)", ty.not(ty.intType()));
+      expectToUnambiguouslyEvaluateTo(
+        "int & number",
+        ty.and(ty.intType(), ty.numberType())
+      );
+      expectToUnambiguouslyEvaluateTo(
+        "(int & number)",
+        ty.and(ty.intType(), ty.numberType())
+      );
+    });
+    test("having parentheses binds operations first", () => {
+      expectToUnambiguouslyEvaluateTo(
+        "!int & number",
+        ty.and(ty.not(ty.intType()), ty.numberType())
+      );
+      expectToUnambiguouslyEvaluateTo(
+        "!(int & number)",
+        ty.not(ty.and(ty.intType(), ty.numberType()))
+      );
+    });
+  });
 });

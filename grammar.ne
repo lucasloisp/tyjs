@@ -31,3 +31,4 @@ ATOMIC ->
   | %Char {% () => ty.charType() %}
   | %Byte {% () => ty.byteType() %}
   | %Any {% () => ty.anyType() %}
+  | %LeftPar _ AND _ %RightPar {% ([_, _2, fst]) => fst %}
