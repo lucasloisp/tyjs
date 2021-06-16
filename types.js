@@ -1,5 +1,5 @@
 function matchValueBasedOnTypeof(value) {
-  return typeof value === this.type
+  return typeof value === this.type;
 }
 
 function typeCreator({ type, left, match }) {
@@ -42,32 +42,56 @@ function bigintType() {
   return typeCreator({ type: "bigint" });
 }
 
+function matchValuesOnVoidType(value) {
+  return value === null || value === undefined;
+}
+
 function voidType() {
-  return typeCreator({ type: "void" });
+  return typeCreator({ type: "void", match: matchValuesOnVoidType });
 }
 
 function intType() {
-  return typeCreator({ type: "int" });
+  return typeCreator({ type: "int", match: Number.isInteger });
+}
+
+function isDouble(value) {
+  return typeof value === "number" && !Number.isInteger(value);
 }
 
 function doubleType() {
-  return typeCreator({ type: "double" });
+  return typeCreator({ type: "double", match: isDouble });
+}
+
+function isChar(value) {
+  return typeof value === "string" && value.length === 1;
 }
 
 function charType() {
-  return typeCreator({ type: "char" });
+  return typeCreator({ type: "char", match: isChar });
+}
+
+function isByte(value) {
+  return Number.isInteger(value) && value >= 0 && value <= 255;
 }
 
 function byteType() {
-  return typeCreator({ type: "byte" });
+  return typeCreator({ type: "byte", match: isByte });
+}
+
+function isAny() {
+  return true;
 }
 
 function anyType() {
-  return typeCreator({ type: "any" });
+  return typeCreator({ type: "any", match: isAny });
+}
+
+function matchesNotType(value) {
+  return !this.left.match(value);
 }
 
 function not(type) {
-  return typeCreator({ type: "not", left: type });
+  return typeCreator({ type: "not", left: type, match: matchesNotType });
 }
 
 module.exports = {
