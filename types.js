@@ -127,8 +127,8 @@ function minus(typeL, typeR) {
 function valueType(value) {
   return typeCreator({
     type: "value",
-    left: value
-  })
+    left: value,
+  });
 }
 
 module.exports = {

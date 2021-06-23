@@ -4,9 +4,10 @@ module.exports = moo.compile({
   Not: ["!"],
   And: ["&"],
   Or: ["|"],
-  SpecialNumber: ['Infinity', 'NaN', '-Infinity', "+Infinity"],
+  SpecialNumber: ["Infinity", "NaN", "-Infinity", "+Infinity"],
   Hexadecimal: /[-+]?0x[a-fA-F\d]+/,
-  NumberLiteral: /[-+]?(?:(?:(?:\d+\.\d*)|(?:\d*\.?\d+))(?:e[+-]?\d+)?)|[-+]?\d+/,
+  NumberLiteral:
+    /[-+]?(?:(?:(?:\d+\.\d*)|(?:\d*\.?\d+))(?:e[+-]?\d+)?)|[-+]?\d+/,
   Minus: ["-"],
   LeftPar: ["("],
   RightPar: [")"],
