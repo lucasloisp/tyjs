@@ -128,6 +128,7 @@ function valueType(value) {
   return typeCreator({
     type: "value",
     left: value,
+    match: (nv) => value === nv,
   });
 }
 

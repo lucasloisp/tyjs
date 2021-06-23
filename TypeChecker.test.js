@@ -173,4 +173,12 @@ describe("the type checker", () => {
       });
     });
   });
+  describe("the value types", () => {
+    test("it works with parsing single-value types", () => {
+      const theSeventeenType = new Type("17");
+      expect(theSeventeenType.checks(17)).toBe(true);
+      expect(theSeventeenType.checks(0)).toBe(false);
+      expect(theSeventeenType.checks("17")).toBe(false);
+    });
+  });
 });
