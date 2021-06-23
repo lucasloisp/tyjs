@@ -180,5 +180,36 @@ describe("the type checker", () => {
       expect(theSeventeenType.checks(0)).toBe(false);
       expect(theSeventeenType.checks("17")).toBe(false);
     });
+    test("it works with parsing single-value types", () => {
+      const theSeventeenType = new Type("17 | string");
+      expect(theSeventeenType.checks(17)).toBe(true);
+      expect(theSeventeenType.checks(0)).toBe(false);
+      expect(theSeventeenType.checks("17")).toBe(true);
+      expect(theSeventeenType.checks("19")).toBe(true);
+    });
+  });
+  describe("the in value types", () => {
+    test("it works with parsing single-value list", () => {
+      const theSeventeenType = new Type("in [17]");
+      expect(theSeventeenType.checks(17)).toBe(true);
+      expect(theSeventeenType.checks(0)).toBe(false);
+      expect(theSeventeenType.checks("17")).toBe(false);
+    });
+    test("it works with parsing two-value list", () => {
+      const twoNumbers = new Type("in [17, 18]");
+      expect(twoNumbers.checks(17)).toBe(true);
+      expect(twoNumbers.checks(18)).toBe(true);
+      expect(twoNumbers.checks(0)).toBe(false);
+      expect(twoNumbers.checks("17")).toBe(false);
+    });
+    test("it works with parsing a multiple type-literal list", () => {
+      const multiTypeArray = new Type('in [17, false, "hello"]');
+      expect(multiTypeArray.checks(17)).toBe(true);
+      expect(multiTypeArray.checks(18)).toBe(false);
+      expect(multiTypeArray.checks(0)).toBe(false);
+      expect(multiTypeArray.checks("17")).toBe(false);
+      expect(multiTypeArray.checks(false)).toBe(true);
+      expect(multiTypeArray.checks("hello")).toBe(true);
+    });
   });
 });

@@ -132,6 +132,14 @@ function valueType(value) {
   });
 }
 
+function arrayOfValuesType(values) {
+  return values
+    .map((v) => valueType(v))
+    .reduce((acc, cv) => {
+      return or(acc, cv);
+    });
+}
+
 module.exports = {
   undefinedType,
   booleanType,
@@ -152,4 +160,5 @@ module.exports = {
   or,
   minus,
   valueType,
+  arrayOfValuesType,
 };

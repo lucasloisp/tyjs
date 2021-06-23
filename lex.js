@@ -1,9 +1,12 @@
+// noinspection RegExpRedundantEscape
+
 const moo = require("moo");
 
 module.exports = moo.compile({
   StringLiteral: /"(?:\\["\\]|[^\n"\\])*"/,
   Not: ["!"],
   And: ["&"],
+  ArrayOfLiteral: /in \[.*\]/,
   Or: ["|"],
   SpecialNumber: ["Infinity", "NaN", "-Infinity", "+Infinity"],
   Hexadecimal: /[-+]?0x[a-fA-F\d]+/,

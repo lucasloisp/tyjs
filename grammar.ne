@@ -16,6 +16,13 @@ AND ->
 NEG ->
     %Not NEG {% ([_, snd]) => ty.not(snd) %}
   | ATOMIC {% ([fst]) => fst %}
+LITERAL ->
+    %StringLiteral {% ([v]) => ty.valueType(v.value.slice(1 ,-1)) %}
+  | %BooleanLiteral {% ([v]) => ty.valueType(v == "true") %}
+  | %ArrayOfLiteral {% ([v]) => ty.arrayOfValuesType(JSON.parse(v.value.slice(2))) %}
+  | %SpecialNumber {% ([v]) => ty.valueType(parseFloat(v)) %}
+  | %Hexadecimal {% ([v]) => ty.valueType(parseInt(v)) %}
+  | %NumberLiteral {% ([v]) => ty.valueType(parseFloat(v)) %}
 ATOMIC ->
     %Undefined {% () => ty.undefinedType() %}
   | %Boolean {% () => ty.booleanType() %}
@@ -31,9 +38,5 @@ ATOMIC ->
   | %Char {% () => ty.charType() %}
   | %Byte {% () => ty.byteType() %}
   | %Any {% () => ty.anyType() %}
-  | %StringLiteral {% ([v]) => ty.valueType(v.value.slice(1 ,-1)) %}
-  | %BooleanLiteral {% ([v]) => ty.valueType(v == "true") %}
-  | %SpecialNumber {% ([v]) => ty.valueType(parseFloat(v)) %}
-  | %Hexadecimal {% ([v]) => ty.valueType(parseInt(v)) %}
-  | %NumberLiteral {% ([v]) => ty.valueType(parseFloat(v)) %}
+  | LITERAL {% ([v]) => v %}
   | %LeftPar _ AND _ %RightPar {% ([_, _2, fst]) => fst %}
