@@ -23,6 +23,7 @@ LITERAL ->
   | %SpecialNumber {% ([v]) => ty.valueType(parseFloat(v)) %}
   | %Hexadecimal {% ([v]) => ty.valueType(parseInt(v)) %}
   | %NumberLiteral {% ([v]) => ty.valueType(parseFloat(v)) %}
+  | %RegexLiteral {% ([v]) => ty.regexType(new RegExp(v.value.slice(1,-1))) %}
 ATOMIC ->
     %Undefined {% () => ty.undefinedType() %}
   | %Boolean {% () => ty.booleanType() %}

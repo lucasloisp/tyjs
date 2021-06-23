@@ -212,4 +212,19 @@ describe("the type checker", () => {
       expect(multiTypeArray.checks("hello")).toBe(true);
     });
   });
+  describe("the regex type", () => {
+    test("simple regex for strings", () => {
+      const ipAddress = new Type("/\\d{3}\\.\\d{3}\\.\\d{3}\\.\\d{3}/");
+      expect(ipAddress.checks("192.168.000.001")).toBe(true);
+    });
+    test("three digit numbers", () => {
+      const threeDigitNumberType = new Type("number & /\\d{3}/");
+      for (let i = 100; i < 1000; i++) {
+        expect(threeDigitNumberType.checks(i)).toBe(true);
+      }
+      for (let i = 0; i < 100; i++) {
+        expect(threeDigitNumberType.checks(i)).toBe(false);
+      }
+    });
+  });
 });

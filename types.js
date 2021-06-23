@@ -140,6 +140,13 @@ function arrayOfValuesType(values) {
     });
 }
 
+function regexType(regex) {
+  return typeCreator({
+    type: "regex",
+    match: (v) => !!v.toString().match(regex),
+  });
+}
+
 module.exports = {
   undefinedType,
   booleanType,
@@ -161,4 +168,5 @@ module.exports = {
   minus,
   valueType,
   arrayOfValuesType,
+  regexType,
 };
