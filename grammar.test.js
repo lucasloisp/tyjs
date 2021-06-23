@@ -216,6 +216,18 @@ describe("the language's grammar", () => {
           "4e2",
           ty.valueType(400.0)
       );
+      expectToUnambiguouslyEvaluateTo(
+          "4.2",
+          ty.valueType(4.2)
+      );
+      expectToUnambiguouslyEvaluateTo(
+          "4.2e1",
+          ty.valueType(42)
+      );
+      expectToUnambiguouslyEvaluateTo(
+          ".2e1",
+          ty.valueType(2)
+      );
     });
   })
 });
