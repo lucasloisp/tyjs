@@ -206,4 +206,16 @@ describe("the language's grammar", () => {
       );
     });
   });
+  describe("the value types", () => {
+    describe("the numeric values", () => {
+      expectToUnambiguouslyEvaluateTo(
+          "1.421",
+          ty.valueType(1.421)
+      );
+      expectToUnambiguouslyEvaluateTo(
+          "4e2",
+          ty.valueType(400.0)
+      );
+    });
+  })
 });

@@ -124,6 +124,13 @@ function minus(typeL, typeR) {
   return and(typeL, not(typeR));
 }
 
+function valueType(value) {
+  return typeCreator({
+    type: "value",
+    left: value
+  })
+}
+
 module.exports = {
   undefinedType,
   booleanType,
@@ -143,4 +150,5 @@ module.exports = {
   and,
   or,
   minus,
+  valueType,
 };

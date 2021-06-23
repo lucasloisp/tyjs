@@ -22,4 +22,5 @@ module.exports = moo.compile({
   Byte: ["byte"],
   Any: ["any", "_"],
   Whitespace: [" "],
+  NumberLiteral: /(?:(?:(?:\d+\.\d*)|(?:\d*\.?\d+))(?:e[+-]?\d+)?)|\d+/,
 });

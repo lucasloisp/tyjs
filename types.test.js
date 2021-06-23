@@ -73,4 +73,12 @@ describe("the types in TyJS", () => {
       });
     });
   });
+  describe("the value-types", () => {
+    test("it is a type that holds a value in it to match", () => {
+      expect(ty.valueType(1.421)).toMatchObject({
+        type: "value",
+        left: 1.421
+      });
+    });
+  });
 });
