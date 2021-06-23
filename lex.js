@@ -1,6 +1,7 @@
 const moo = require("moo");
 
 module.exports = moo.compile({
+  StringLiteral: /"(?:\\["\\]|[^\n"\\])*"/,
   Not: ["!"],
   And: ["&"],
   Or: ["|"],

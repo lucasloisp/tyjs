@@ -31,6 +31,7 @@ ATOMIC ->
   | %Char {% () => ty.charType() %}
   | %Byte {% () => ty.byteType() %}
   | %Any {% () => ty.anyType() %}
+  | %StringLiteral {% ([v]) => ty.valueType(v.value.slice(1 ,-1)) %}
   | %BooleanLiteral {% ([v]) => ty.valueType(v == "true") %}
   | %SpecialNumber {% ([v]) => ty.valueType(parseFloat(v)) %}
   | %Hexadecimal {% ([v]) => ty.valueType(parseInt(v)) %}

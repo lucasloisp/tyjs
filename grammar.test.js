@@ -239,5 +239,9 @@ describe("the language's grammar", () => {
       expectToUnambiguouslyEvaluateTo("true", ty.valueType(true));
       expectToUnambiguouslyEvaluateTo("false", ty.valueType(false));
     });
+    test("the string literal values", () => {
+      expectToUnambiguouslyEvaluateTo('""', ty.valueType(""));
+      expectToUnambiguouslyEvaluateTo('"hello"', ty.valueType("hello"));
+    });
   });
 });
