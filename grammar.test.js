@@ -214,7 +214,7 @@ describe("the language's grammar", () => {
       );
       expectToUnambiguouslyEvaluateTo(
           "4e2",
-          ty.valueType(400.0)
+          ty.valueType(4e2)
       );
       expectToUnambiguouslyEvaluateTo(
           "4.2",
@@ -222,12 +222,76 @@ describe("the language's grammar", () => {
       );
       expectToUnambiguouslyEvaluateTo(
           "4.2e1",
-          ty.valueType(42)
+          ty.valueType(4.2e1)
+      );
+      expectToUnambiguouslyEvaluateTo(
+          ".2e1",
+          ty.valueType(.2e1)
       );
       expectToUnambiguouslyEvaluateTo(
           ".2e1",
           ty.valueType(2)
       );
+      expectToUnambiguouslyEvaluateTo(
+          "-2",
+          ty.valueType(-2)
+      );
+      expectToUnambiguouslyEvaluateTo(
+          "-.121",
+          ty.valueType(-0.121)
+      );
+      expectToUnambiguouslyEvaluateTo(
+          "0x12",
+          ty.valueType(0x12)
+      );
+      expectToUnambiguouslyEvaluateTo(
+          "-0x12",
+          ty.valueType(-0x12)
+      );
+      expectToUnambiguouslyEvaluateTo(
+          "+0x12",
+          ty.valueType(+0x12)
+      );
+      expectToUnambiguouslyEvaluateTo(
+          "Infinity",
+          ty.valueType(Infinity)
+      );
+      expectToUnambiguouslyEvaluateTo(
+          "-Infinity",
+          ty.valueType(-Infinity)
+      );
+      expectToUnambiguouslyEvaluateTo(
+          "+Infinity",
+          ty.valueType(+Infinity)
+      );
+      expectToUnambiguouslyEvaluateTo(
+          "NaN",
+          ty.valueType(NaN)
+      );
     });
+    test("negative numbers are not the same as type difference", () => {
+      expectToUnambiguouslyEvaluateTo(
+          "string - 1",
+          ty.minus(ty.stringType(), ty.valueType(1))
+      );
+      expectToUnambiguouslyEvaluateTo(
+          "string - 1",
+          ty.minus(ty.stringType(), ty.valueType(1))
+      );
+      expectToUnambiguouslyEvaluateTo(
+          "-1",
+          ty.valueType(-1)
+      );
+    });
+    test("the boolean values", () => {
+      expectToUnambiguouslyEvaluateTo(
+          "true",
+          ty.valueType(true)
+      );
+      expectToUnambiguouslyEvaluateTo(
+          "false",
+          ty.valueType(false)
+      );
+    })
   })
 });
