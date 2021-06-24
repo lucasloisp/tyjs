@@ -137,11 +137,7 @@ function valueType(value) {
 }
 
 function arrayOfValuesType(values) {
-  return values
-    .map((v) => valueType(v))
-    .reduce((acc, cv) => {
-      return or(acc, cv);
-    });
+  return values.map(valueType).reduce(or);
 }
 
 function regexType(regex) {
