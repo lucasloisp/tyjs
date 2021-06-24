@@ -124,11 +124,15 @@ function minus(typeL, typeR) {
   return and(typeL, not(typeR));
 }
 
+function matchesValueType(value) {
+  return this.value === value;
+}
+
 function valueType(value) {
   return typeCreator({
     type: "value",
-    left: value,
-    match: (nv) => value === nv,
+    value,
+    match: matchesValueType,
   });
 }
 

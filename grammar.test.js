@@ -201,7 +201,7 @@ describe("the language's grammar", () => {
       );
     });
   });
-  describe.skip("the value types", () => {
+  describe("the value types", () => {
     test("the numeric values", () => {
       expectToUnambiguouslyEvaluateTo("1.421", ty.valueType(1.421));
       expectToUnambiguouslyEvaluateTo("4e2", ty.valueType(4e2));
