@@ -140,10 +140,15 @@ function arrayOfValuesType(values) {
   return values.map(valueType).reduce(or);
 }
 
+function matchRegex(value) {
+  return !!value.toString().match(this.regex);
+}
+
 function regexType(regex) {
   return typeCreator({
     type: "regex",
-    match: (v) => !!v.toString().match(regex),
+    regex,
+    match: matchRegex,
   });
 }
 
