@@ -1,4 +1,4 @@
-const type = require("./index.js");
+const { type } = require("./index.js");
 
 describe("the tyjs library", () => {
   describe("checking for types", () => {
@@ -26,8 +26,10 @@ describe("the tyjs library", () => {
         const [gradeType] = args;
         return args.length === 1 && gradeType(studentValue.grade);
       });
-      expect(studentType.checks(new Student("Agustin", "123", "A"))).toBe(true);
-      expect(studentType.checks(new Student("Lucas", "1234", 123))).toBe(false);
+      let alice = new Student("Alice", "123", "A");
+      expect(studentType.checks(alice)).toBe(true);
+      let bob = new Student("Bob", "1234", 123);
+      expect(studentType.checks(bob)).toBe(false);
     });
   });
 });
