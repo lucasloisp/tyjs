@@ -243,7 +243,7 @@ describe("the language's grammar", () => {
     test("it can type homogeneous sequences", () => {
       expectToUnambiguouslyEvaluateTo(
         "[ ...number ]",
-        ty.sequenceType(ty.numberType())
+        ty.sequenceType([ty.numberType()])
       );
     });
     test("it can type a sequence of any type of elements", () => {

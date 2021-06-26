@@ -25,9 +25,14 @@ LITERAL ->
   | %NumberLiteral {% ([v]) => ty.valueType(parseFloat(v)) %}
   | %RegexLiteral {% ([v]) => ty.regexType(new RegExp(v.value.slice(1,-1))) %}
 SEQUENCE ->
-    %LeftSquareBracket _ %Decomposition ATOMIC _ %RightSquareBracket {% ([lsb, _, dcp, v]) => ty.sequenceType(v) %}
-  | %LeftSquareBracket _ %Decomposition _ %RightSquareBracket {% () =>  ty.sequenceType(ty.anyType()) %}
-  | %LeftSquareBracket _ (ATOMIC %Comma _ {% ([v]) => ty.singleSeq(v) %}):* ATOMIC _ %RightSquareBracket {% ([lsb, _, tail, head]) => ty.sequenceType([...tail, ty.singleSeq(head)]) %}
+    %LeftSquareBracket _ %Decomposition _ %RightSquareBracket {% () =>  ty.sequenceType(ty.anyType()) %}
+  | %LeftSquareBracket
+    _
+    (ATOMIC %Comma _ {% ([v]) => ty.singleSeq(v) %} | %Decomposition ATOMIC %Comma _ {% ([_, v]) => v %}):*
+    (ATOMIC _ {% ([v]) => ty.singleSeq(v) %} | %Decomposition ATOMIC {% ([_, v]) => v %})
+    _
+    %RightSquareBracket
+    {% ([lsb, _, tail, head]) => ty.sequenceType([...tail, head]) %}
 ATOMIC ->
     %Undefined {% () => ty.undefinedType() %}
   | SEQUENCE {% ([v]) => v %}

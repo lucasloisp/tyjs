@@ -154,21 +154,29 @@ function regexType(regex) {
 
 function matchSequenceType(seq) {
   if (this.left instanceof Array) {
-    if (!seq || !seq.every || this.left.length !== seq.length) {
+    if (!seq || !seq.every) {
       return false;
     }
-    for (let i = 0; i < this.left.length; i++) {
-      const type = this.left[i];
-      const value = seq[i];
+    let valueIx = 0;
+    for (let typeIx = 0; typeIx < this.left.length; typeIx++) {
+      const type = this.left[typeIx];
       if (type.type === "singleSeq") {
+        if (valueIx >= seq.length) return false;
+        const value = seq[valueIx++];
         if (!type.left.match(value)) {
           return false;
         }
       } else {
-        throw new Error("not implemented");
+        while (valueIx < seq.length) {
+          const value = seq[valueIx];
+          if (!type.match(value)) {
+            break;
+          }
+          valueIx++;
+        }
       }
     }
-    return true;
+    return valueIx === seq.length;
   } else {
     return !!seq && !!seq.every && seq.every((val) => this.left.match(val));
   }

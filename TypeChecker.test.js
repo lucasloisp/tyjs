@@ -251,6 +251,26 @@ describe("the type checker", () => {
         expect(numberSequence.checks("hello")).toBe(false);
         expect(numberSequence.checks(null)).toBe(false);
       });
+      test("sequences of multiple or single types", () => {
+        const numberSequence = new Type("[ ...string, number ]");
+        expect(numberSequence.checks(["hello", 1])).toBe(true);
+        expect(numberSequence.checks(["hello", "goodbye", 1])).toBe(true);
+        expect(numberSequence.checks([1])).toBe(true);
+        expect(numberSequence.checks(["hello"])).toBe(false);
+        expect(numberSequence.checks([])).toBe(false);
+        expect(numberSequence.checks("hello")).toBe(false);
+        expect(numberSequence.checks(null)).toBe(false);
+      });
+      test("sequences of 1+ elements", () => {
+        const numberSequence = new Type("[ number, ...number ]");
+        expect(numberSequence.checks([1])).toBe(true);
+        expect(numberSequence.checks([1, 2])).toBe(true);
+        expect(numberSequence.checks([1, 2, 3])).toBe(true);
+        expect(numberSequence.checks([])).toBe(false);
+        expect(numberSequence.checks(["hello", "goodbye"])).toBe(false);
+        expect(numberSequence.checks("hello")).toBe(false);
+        expect(numberSequence.checks(null)).toBe(false);
+      });
     });
   });
 });
