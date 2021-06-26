@@ -26,6 +26,7 @@ LITERAL ->
   | %RegexLiteral {% ([v]) => ty.regexType(new RegExp(v.value.slice(1,-1))) %}
 SEQUENCE ->
     %LeftSquareBracket _ %Decomposition ATOMIC _ %RightSquareBracket {% ([lsb, _, dcp, v]) => ty.sequenceType(v) %}
+  | %LeftSquareBracket _ %Decomposition _ %RightSquareBracket {% () =>  ty.sequenceType(ty.anyType()) %}
 ATOMIC ->
     %Undefined {% () => ty.undefinedType() %}
   | SEQUENCE {% ([v]) => v %}

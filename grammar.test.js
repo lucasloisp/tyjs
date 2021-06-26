@@ -246,5 +246,8 @@ describe("the language's grammar", () => {
         ty.sequenceType(ty.numberType())
       );
     });
+    test("it can type a sequence of any type of elements", () => {
+      expectToUnambiguouslyEvaluateTo("[ ... ]", ty.sequenceType(ty.anyType()));
+    });
   });
 });
