@@ -17,7 +17,7 @@
     "format": "prettier --write '**/*.js'",
     "tdd": "jest --watchAll",
     "grammar": "nearleyc grammar.ne -o grammar.js",
-    "grammar-watch": "onchange 'grammar.ne' -- npm run grammar"
+    "grammar-watch": "onchange \"grammar.ne\" -- npm run grammar"
   },
   "author": "",
   "license": "ISC"
