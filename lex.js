@@ -7,6 +7,7 @@ module.exports = moo.compile({
   Decomposition: ["..."],
   LeftSquareBracket: ["["],
   RightSquareBracket: ["]"],
+  Comma: [","],
   Not: ["!"],
   And: ["&"],
   ArrayOfLiteral: /in \[.*\]/,

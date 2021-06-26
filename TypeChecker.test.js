@@ -236,6 +236,21 @@ describe("the type checker", () => {
         expect(numberSequence.checks("hello")).toBe(false);
         expect(numberSequence.checks(null)).toBe(false);
       });
+      test.skip("objects are sequences", () => {
+        const numberSequence = new Type("[ ...[string, number] ]");
+        expect(numberSequence.checks({ ["age"]: 2 })).toBe(true);
+        expect(numberSequence.checks(["hello"])).toBe(false);
+        expect(numberSequence.checks("hello")).toBe(false);
+        expect(numberSequence.checks(null)).toBe(false);
+      });
+      test("tuples can be typed", () => {
+        const numberSequence = new Type("[ string, bigint, number ]");
+        expect(numberSequence.checks(["hello", 1n, 1])).toBe(true);
+        expect(numberSequence.checks(["hello", 1n])).toBe(false);
+        expect(numberSequence.checks(["hello"])).toBe(false);
+        expect(numberSequence.checks("hello")).toBe(false);
+        expect(numberSequence.checks(null)).toBe(false);
+      });
     });
   });
 });

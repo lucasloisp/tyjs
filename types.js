@@ -152,13 +152,27 @@ function regexType(regex) {
   });
 }
 function matchSequenceType(seq) {
-  return !!seq && !!seq.every && seq.every((val) => this.left.match(val));
+  if (this.left instanceof Array) {
+    if (!seq || !seq.every || this.left.length !== seq.length) {
+      return false;
+    }
+    for (let i = 0; i < this.left.length; i++) {
+      const type = this.left[i];
+      const value = seq[i];
+      if (!type.match(value)) {
+        return false;
+      }
+    }
+    return true;
+  } else {
+    return !!seq && !!seq.every && seq.every((val) => this.left.match(val));
+  }
 }
 
-function sequenceType(elementType) {
+function sequenceType(elementTypes) {
   return typeCreator({
     type: "sequence",
-    left: elementType,
+    left: elementTypes,
     match: matchSequenceType,
   });
 }
