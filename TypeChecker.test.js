@@ -271,6 +271,33 @@ describe("the type checker", () => {
         expect(numberSequence.checks("hello")).toBe(false);
         expect(numberSequence.checks(null)).toBe(false);
       });
+      test("sequences of many, single, and many", () => {
+        const numberSequence = new Type("[ ...string, number, ...string ]");
+        expect(numberSequence.checks([1])).toBe(true);
+        expect(numberSequence.checks([4])).toBe(true);
+        expect(numberSequence.checks([1, "hello"])).toBe(true);
+        expect(numberSequence.checks(["hello", 1])).toBe(true);
+        expect(numberSequence.checks(["hello", 1, "goodbye"])).toBe(true);
+        expect(numberSequence.checks(["hello", "world", 1, "goodbye"])).toBe(
+          true
+        );
+        expect(numberSequence.checks([1, 2, 3])).toBe(false);
+        expect(numberSequence.checks([])).toBe(false);
+        expect(numberSequence.checks(["hello", "goodbye"])).toBe(false);
+        expect(numberSequence.checks("hello")).toBe(false);
+        expect(numberSequence.checks(null)).toBe(false);
+      });
+      test("sequences of many a literal", () => {
+        const numberSequence = new Type("[ ...4 ]");
+        expect(numberSequence.checks([])).toBe(true);
+        expect(numberSequence.checks([4])).toBe(true);
+        expect(numberSequence.checks([4, 4])).toBe(true);
+        expect(numberSequence.checks([1, "hello"])).toBe(false);
+        expect(numberSequence.checks([1, 2, 3])).toBe(false);
+        expect(numberSequence.checks(["hello", "goodbye"])).toBe(false);
+        expect(numberSequence.checks("hello")).toBe(false);
+        expect(numberSequence.checks(null)).toBe(false);
+      });
     });
   });
 });
