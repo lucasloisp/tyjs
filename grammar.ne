@@ -24,12 +24,16 @@ LITERAL ->
   | %Hexadecimal {% ([v]) => ty.valueType(parseInt(v)) %}
   | %NumberLiteral {% ([v]) => ty.valueType(parseFloat(v)) %}
   | %RegexLiteral {% ([v]) => ty.regexType(new RegExp(v.value.slice(1,-1))) %}
+SEQUENCEELEMENT ->
+    ATOMIC {% ([v]) => ty.singleSeq(v) %}
+  | %Decomposition ATOMIC {% ([_, v]) => v %}
+  | %Decomposition %IntegerLiteral _ ATOMIC
+    {% ([_, sqc, _1, v]) => ty.times(v, parseInt(sqc.value)) %}
 SEQUENCE ->
     %LeftSquareBracket
     _
-    (ATOMIC %Comma _ {% ([v]) => ty.singleSeq(v) %} | %Decomposition ATOMIC %Comma _ {% ([_, v]) => v %}):*
-    (ATOMIC _ {% ([v]) => ty.singleSeq(v) %}
-     | %Decomposition ATOMIC {% ([_, v]) => v %}
+    (SEQUENCEELEMENT %Comma _ {% id %}):*
+    (SEQUENCEELEMENT {% id %}
      | %Decomposition {% () =>  ty.anyType() %})
     _
     %RightSquareBracket

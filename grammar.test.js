@@ -252,6 +252,21 @@ describe("the language's grammar", () => {
         ty.sequenceType([ty.anyType()])
       );
     });
+    test("a sequence can have n occurrences of a type", () => {
+      const lexer = require("./lex");
+      lexer.reset("[ ...3 * number ]");
+      for (const token of lexer) {
+        console.log(token);
+      }
+      expectToUnambiguouslyEvaluateTo(
+        "[ ...3 * number ]",
+        ty.sequenceType([
+          ty.singleSeq(ty.numberType()),
+          ty.singleSeq(ty.numberType()),
+          ty.singleSeq(ty.numberType()),
+        ])
+      );
+    });
     test.skip("sequence of any can only go last", () => {
       expectToBeASyntaxError("[ ..., number]");
     });

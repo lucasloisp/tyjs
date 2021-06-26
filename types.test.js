@@ -83,9 +83,9 @@ describe("the types in TyJS", () => {
   });
   describe("the sequence type", () => {
     test("it handles a homogeneous sequence of types", () => {
-      expect(ty.sequenceType(ty.numberType())).toMatchObject({
+      expect(ty.sequenceType([ty.numberType()])).toMatchObject({
         type: "sequence",
-        left: ty.numberType(),
+        left: [ty.numberType()],
       });
     });
   });

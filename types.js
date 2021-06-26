@@ -152,6 +152,14 @@ function regexType(regex) {
   });
 }
 
+function times(type, count) {
+  let types = [];
+  for (let i = 0; i < count; i++) {
+    types.push(singleSeq(type));
+  }
+  return types;
+}
+
 function matchSequenceType(seq, ctx) {
   if (!seq || typeof seq[Symbol.iterator] !== "function") {
     return false;
@@ -190,7 +198,7 @@ function singleSeq(type) {
 function sequenceType(elementTypes) {
   return typeCreator({
     type: "sequence",
-    left: elementTypes,
+    left: elementTypes.flat(),
     match: matchSequenceType,
   });
 }
@@ -242,4 +250,5 @@ module.exports = {
   sequenceType,
   singleSeq,
   classType,
+  times,
 };
