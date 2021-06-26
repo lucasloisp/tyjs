@@ -247,7 +247,13 @@ describe("the language's grammar", () => {
       );
     });
     test("it can type a sequence of any type of elements", () => {
-      expectToUnambiguouslyEvaluateTo("[ ... ]", ty.sequenceType(ty.anyType()));
+      expectToUnambiguouslyEvaluateTo(
+        "[ ... ]",
+        ty.sequenceType([ty.anyType()])
+      );
+    });
+    test.skip("sequence of any can only go last", () => {
+      expectToBeASyntaxError("[ ..., number]");
     });
   });
 });

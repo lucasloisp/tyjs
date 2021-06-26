@@ -25,11 +25,12 @@ LITERAL ->
   | %NumberLiteral {% ([v]) => ty.valueType(parseFloat(v)) %}
   | %RegexLiteral {% ([v]) => ty.regexType(new RegExp(v.value.slice(1,-1))) %}
 SEQUENCE ->
-    %LeftSquareBracket _ %Decomposition _ %RightSquareBracket {% () =>  ty.sequenceType(ty.anyType()) %}
-  | %LeftSquareBracket
+    %LeftSquareBracket
     _
     (ATOMIC %Comma _ {% ([v]) => ty.singleSeq(v) %} | %Decomposition ATOMIC %Comma _ {% ([_, v]) => v %}):*
-    (ATOMIC _ {% ([v]) => ty.singleSeq(v) %} | %Decomposition ATOMIC {% ([_, v]) => v %})
+    (ATOMIC _ {% ([v]) => ty.singleSeq(v) %}
+     | %Decomposition ATOMIC {% ([_, v]) => v %}
+     | %Decomposition {% () =>  ty.anyType() %})
     _
     %RightSquareBracket
     {% ([lsb, _, tail, head]) => ty.sequenceType([...tail, head]) %}

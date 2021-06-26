@@ -16,6 +16,7 @@ module.exports = moo.compile({
   Hexadecimal: /[-+]?0x[a-fA-F\d]+/,
   NumberLiteral:
     /[-+]?(?:(?:(?:\d+\.\d*)|(?:\d*\.?\d+))(?:e[+-]?\d+)?)|[-+]?\d+/,
+  IntegerLiteral: /\.\.\.\d+/,
   RegexLiteral: /\/.*\//,
   Minus: ["-"],
   LeftPar: ["("],

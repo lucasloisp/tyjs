@@ -153,33 +153,29 @@ function regexType(regex) {
 }
 
 function matchSequenceType(seq) {
-  if (this.left instanceof Array) {
-    if (!seq || !seq.every) {
-      return false;
-    }
-    let valueIx = 0;
-    for (let typeIx = 0; typeIx < this.left.length; typeIx++) {
-      const type = this.left[typeIx];
-      if (type.type === "singleSeq") {
-        if (valueIx >= seq.length) return false;
-        const value = seq[valueIx++];
-        if (!type.left.match(value)) {
-          return false;
+  if (!seq || !seq.every) {
+    return false;
+  }
+  let valueIx = 0;
+  for (let typeIx = 0; typeIx < this.left.length; typeIx++) {
+    const type = this.left[typeIx];
+    if (type.type === "singleSeq") {
+      if (valueIx >= seq.length) return false;
+      const value = seq[valueIx++];
+      if (!type.left.match(value)) {
+        return false;
+      }
+    } else {
+      while (valueIx < seq.length) {
+        const value = seq[valueIx];
+        if (!type.match(value)) {
+          break;
         }
-      } else {
-        while (valueIx < seq.length) {
-          const value = seq[valueIx];
-          if (!type.match(value)) {
-            break;
-          }
-          valueIx++;
-        }
+        valueIx++;
       }
     }
-    return valueIx === seq.length;
-  } else {
-    return !!seq && !!seq.every && seq.every((val) => this.left.match(val));
   }
+  return valueIx === seq.length;
 }
 
 function singleSeq(type) {
