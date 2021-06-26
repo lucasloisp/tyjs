@@ -27,7 +27,7 @@ LITERAL ->
 SEQUENCE ->
     %LeftSquareBracket _ %Decomposition ATOMIC _ %RightSquareBracket {% ([lsb, _, dcp, v]) => ty.sequenceType(v) %}
   | %LeftSquareBracket _ %Decomposition _ %RightSquareBracket {% () =>  ty.sequenceType(ty.anyType()) %}
-  | %LeftSquareBracket _ (ATOMIC %Comma _ {% ([v]) => v %}):* ATOMIC _ %RightSquareBracket {% ([lsb, _, tail, head]) => ty.sequenceType([...tail, head]) %}
+  | %LeftSquareBracket _ (ATOMIC %Comma _ {% ([v]) => ty.singleSeq(v) %}):* ATOMIC _ %RightSquareBracket {% ([lsb, _, tail, head]) => ty.sequenceType([...tail, ty.singleSeq(head)]) %}
 ATOMIC ->
     %Undefined {% () => ty.undefinedType() %}
   | SEQUENCE {% ([v]) => v %}

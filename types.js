@@ -151,6 +151,7 @@ function regexType(regex) {
     match: matchRegex,
   });
 }
+
 function matchSequenceType(seq) {
   if (this.left instanceof Array) {
     if (!seq || !seq.every || this.left.length !== seq.length) {
@@ -159,14 +160,25 @@ function matchSequenceType(seq) {
     for (let i = 0; i < this.left.length; i++) {
       const type = this.left[i];
       const value = seq[i];
-      if (!type.match(value)) {
-        return false;
+      if (type.type === "singleSeq") {
+        if (!type.left.match(value)) {
+          return false;
+        }
+      } else {
+        throw new Error("not implemented");
       }
     }
     return true;
   } else {
     return !!seq && !!seq.every && seq.every((val) => this.left.match(val));
   }
+}
+
+function singleSeq(type) {
+  return {
+    type: "singleSeq",
+    left: type,
+  };
 }
 
 function sequenceType(elementTypes) {
@@ -200,4 +212,5 @@ module.exports = {
   arrayOfValuesType,
   regexType,
   sequenceType,
+  singleSeq,
 };
