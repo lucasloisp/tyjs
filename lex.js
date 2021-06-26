@@ -4,6 +4,9 @@ const moo = require("moo");
 
 module.exports = moo.compile({
   StringLiteral: /"(?:\\["\\]|[^\n"\\])*"/,
+  Decomposition: ["..."],
+  LeftSquareBracket: ["["],
+  RightSquareBracket: ["]"],
   Not: ["!"],
   And: ["&"],
   ArrayOfLiteral: /in \[.*\]/,

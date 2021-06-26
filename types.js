@@ -151,6 +151,17 @@ function regexType(regex) {
     match: matchRegex,
   });
 }
+function matchSequenceType(seq) {
+  return !!seq && !!seq.every && seq.every((val) => this.left.match(val));
+}
+
+function sequenceType(elementType) {
+  return typeCreator({
+    type: "sequence",
+    left: elementType,
+    match: matchSequenceType,
+  });
+}
 
 module.exports = {
   undefinedType,
@@ -174,4 +185,5 @@ module.exports = {
   valueType,
   arrayOfValuesType,
   regexType,
+  sequenceType,
 };

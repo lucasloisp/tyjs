@@ -227,4 +227,15 @@ describe("the type checker", () => {
       }
     });
   });
+  describe("the sequence type", () => {
+    describe("single type sequences", () => {
+      test("a homogeneous number sequence", () => {
+        const numberSequence = new Type("[ ...number ]");
+        expect(numberSequence.checks([1])).toBe(true);
+        expect(numberSequence.checks(["hello"])).toBe(false);
+        expect(numberSequence.checks("hello")).toBe(false);
+        expect(numberSequence.checks(null)).toBe(false);
+      });
+    });
+  });
 });
