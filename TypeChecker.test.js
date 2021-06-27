@@ -446,5 +446,22 @@ describe("the type checker", () => {
       expect(numberBox.checks(1)).toBe(true);
       expect(numberBox.checks("hello")).toBe(false);
     });
+    test("nested generic types", () => {
+      class Box {
+        constructor(value) {
+          this.value = value;
+        }
+      }
+      const numberBox = new Type("Box<Box<number>>");
+      numberBox.classChecker(Box, (box, args) => {
+        return args.length === 1 && args[0](box.value);
+      });
+      expect(numberBox.checks(new Box(new Box(1)))).toBe(true);
+      expect(numberBox.checks(new Box(new Box("hello")))).toBe(false);
+      expect(numberBox.checks(new Box(1))).toBe(false);
+      expect(numberBox.checks(new Box("hello"))).toBe(false);
+      expect(numberBox.checks(1)).toBe(false);
+      expect(numberBox.checks("hello")).toBe(false);
+    });
   });
 });
