@@ -371,5 +371,12 @@ describe("the type checker", () => {
       expect(setOfStringType.checks(new Set([1, "test", 1]))).toBe(false);
       expect(setOfStringType.checks(["test", "test2"])).toBe(false);
     });
+    test("Map class with generic type for key and values", ()=>{
+      const setOfStringType = new Type("Map<string, number>");
+      expect(setOfStringType.checks( new Map([["one", 1], ["two", 2]]))).toBe(true);
+      expect(setOfStringType.checks( new Map([[1, 1], ["two", 2]]))).toBe(false);
+      expect(setOfStringType.checks( new Map([["one", 1], ["two", "2"]]))).toBe(false);
+      expect(setOfStringType.checks(["test", "test2"])).toBe(false);
+    });
   });
 });

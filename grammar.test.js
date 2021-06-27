@@ -269,7 +269,12 @@ describe("the language's grammar", () => {
           ty.and(ty.classType("Array"), ty.sequenceType([ty.stringType()]))
       );
     });
-
+    test("a map like object with a generic type for key and value", () =>{
+      expectToUnambiguouslyEvaluateTo(
+          "Map<string, string>",
+          ty.and(ty.classType("Map"), ty.sequenceType([ty.sequenceType([ty.singleSeq(ty.stringType()), ty.singleSeq(ty.stringType())])]))
+      );
+    });
   })
 
 });

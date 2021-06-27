@@ -156,7 +156,10 @@ function matchSequenceType(seq) {
   if (!seq) {
     return false;
   }
-  if(!(seq instanceof Array)) {
+  if(seq instanceof Map){
+    seq = seq.entries();
+  }
+  if (!(seq instanceof Array)) {
     seq = Array.from(seq);
   }
 
