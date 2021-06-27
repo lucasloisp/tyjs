@@ -272,5 +272,17 @@ describe("the language's grammar", () => {
         ty.classType("Map", [ty.stringType(), ty.stringType()])
       );
     });
+    test("a class with multiple generics", () => {
+      expectToUnambiguouslyEvaluateTo(
+        "CustomClass<number, bigint, string, any, void>",
+        ty.classType("CustomClass", [
+          ty.numberType(),
+          ty.bigintType(),
+          ty.stringType(),
+          ty.anyType(),
+          ty.voidType(),
+        ])
+      );
+    });
   });
 });

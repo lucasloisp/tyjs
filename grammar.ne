@@ -52,6 +52,6 @@ ATOMIC ->
   | %Any {% () => ty.anyType() %}
   | LITERAL {% ([v]) => v %}
   | %LeftPar _ AND _ %RightPar {% ([_, _2, fst]) => fst %}
-  | %Class %Lt AND %Gt {% ([fst, _, t1]) => ty.classType(fst.value, [t1]) %}
-  | %Class %Lt AND %Comma _ AND %Gt {% ([fst, _, t1, _2, _3, t2]) => ty.classType(fst.value, [t1, t2]) %}
+  | %Class %Lt (AND %Comma _ {% id %}):* AND %Gt
+    {% ([cls, _, tail, head]) => ty.classType(cls.value, [...tail, head]) %}
   | %Class {% ([fst]) => ty.classType(fst.value) %}
