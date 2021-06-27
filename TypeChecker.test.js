@@ -431,5 +431,20 @@ describe("the type checker", () => {
         "ClassWithoutChecker has no checking for generics"
       );
     });
+    test("generics work in an inner type-node", () => {
+      class Box {
+        constructor(value) {
+          this.value = value;
+        }
+      }
+      const numberBox = new Type("Box<number> | number");
+      numberBox.classChecker(Box, (box, args) => {
+        return args.length === 1 && args[0](box.value);
+      });
+      expect(numberBox.checks(new Box(1))).toBe(true);
+      expect(numberBox.checks(new Box("hello"))).toBe(false);
+      expect(numberBox.checks(1)).toBe(true);
+      expect(numberBox.checks("hello")).toBe(false);
+    });
   });
 });
