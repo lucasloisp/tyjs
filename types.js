@@ -156,9 +156,6 @@ function matchSequenceType(seq) {
   if (!seq) {
     return false;
   }
-  if (seq instanceof Map) {
-    seq = seq.entries();
-  }
   if (!(seq instanceof Array)) {
     seq = Array.from(seq);
   }
@@ -200,26 +197,15 @@ function sequenceType(elementTypes) {
   });
 }
 
-function matchClassGenerics(classToMatch, obj, generics) {
-  if (generics.length === 0) return true;
-  switch (classToMatch) {
-    case "Array":
-    case "Set":
-      return sequenceType(generics).match(obj);
-    case "Map":
-      return sequenceType([
-        sequenceType([singleSeq(generics[0]), singleSeq(generics[1])]),
-      ]).match(obj);
-    default:
-      return false;
-  }
-}
-
-function matchClassType(obj) {
+function matchClassType(obj, classCheckers) {
   const classToMatch = obj.constructor.name;
   return (
     classToMatch === this.left &&
-    matchClassGenerics(classToMatch, obj, this.generics)
+    (this.generics.length === 0 ||
+      classCheckers(classToMatch)(
+        obj,
+        this.generics.map((t) => (v) => t.match(v))
+      ))
   );
 }
 

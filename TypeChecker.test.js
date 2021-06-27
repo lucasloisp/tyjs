@@ -240,6 +240,15 @@ describe("the type checker", () => {
       test.skip("objects are sequences", () => {
         const numberSequence = new Type("[ ...[string, number] ]");
         expect(numberSequence.checks({ ["age"]: 2 })).toBe(true);
+        expect(numberSequence.checks(new Map([["age", 2]]))).toBe(true);
+        expect(
+          numberSequence.checks(
+            new Map([
+              ["age", 2],
+              ["grade", 14],
+            ])
+          )
+        ).toBe(true);
         expect(numberSequence.checks(["hello"])).toBe(false);
         expect(numberSequence.checks("hello")).toBe(false);
         expect(numberSequence.checks(null)).toBe(false);
