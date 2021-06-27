@@ -408,5 +408,19 @@ describe("the type checker", () => {
       ).toBe(false);
       expect(setOfStringType.checks(["test", "test2"])).toBe(false);
     });
+    test("generic custom box class", () => {
+      class Box {
+        constructor(value) {
+          this.value = value;
+        }
+      }
+      const numberBox = new Type("Box<number>");
+      numberBox.classChecker(Box, (box, args) => {
+        return args.length === 1 && args[0](box.value);
+      });
+      expect(numberBox.checks(new Box(1))).toBe(true);
+      expect(numberBox.checks(new Box("hello"))).toBe(false);
+      expect(numberBox.checks(1)).toBe(false);
+    });
   });
 });

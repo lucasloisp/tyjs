@@ -13,7 +13,7 @@ describe("the tyjs library", () => {
     });
   });
   describe("checking for a new class", () => {
-    test.skip("my own person type", () => {
+    test("my own person type", () => {
       class Student {
         constructor(name, id, grade) {
           this.name = name;

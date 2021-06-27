@@ -27,6 +27,10 @@ class Type {
   checks(value) {
     return this.typeTree.match(value, (cls) => this.classCheckers.get(cls));
   }
+
+  classChecker(cls, checker) {
+    this.classCheckers.set(cls.name, checker);
+  }
 }
 
 module.exports = Type;
