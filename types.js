@@ -156,7 +156,7 @@ function matchSequenceType(seq) {
   if (!seq) {
     return false;
   }
-  if(seq instanceof Map){
+  if (seq instanceof Map) {
     seq = seq.entries();
   }
   if (!(seq instanceof Array)) {
@@ -200,8 +200,7 @@ function sequenceType(elementTypes) {
   });
 }
 
-
-function matchClassType(obj){
+function matchClassType(obj) {
   return obj.constructor.name === this.left;
 }
 
@@ -237,5 +236,5 @@ module.exports = {
   regexType,
   sequenceType,
   singleSeq,
-  classType
+  classType,
 };

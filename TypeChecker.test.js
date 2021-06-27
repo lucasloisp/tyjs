@@ -338,44 +338,65 @@ describe("the type checker", () => {
     });
   });
   describe("the class type", () => {
-    test("basic js class", ()=>{
+    test("basic js class", () => {
       const dateClass = new Type("Date");
       expect(dateClass.checks(new Date())).toBe(true);
       expect(dateClass.checks(BigInt(2))).toBe(false);
       expect(dateClass.checks(2)).toBe(false);
     });
-    test("custom js class", ()=>{
+    test("custom js class", () => {
       const customClass = new Type("CustomClass");
-      class CustomClass{}
+      class CustomClass {}
       expect(customClass.checks(new CustomClass())).toBe(true);
       expect(customClass.checks(new Date())).toBe(false);
     });
-    test("custom function constructor", ()=>{
+    test("custom function constructor", () => {
       const customConstructorClass = new Type("CustomConstructor");
-      function CustomConstructor(){
+      function CustomConstructor() {
         this.test = "Hello";
       }
       expect(customConstructorClass.checks(new CustomConstructor())).toBe(true);
       expect(customConstructorClass.checks(new Date())).toBe(false);
     });
-    test("Array class with generic type", ()=>{
+    test("Array class with generic type", () => {
       const arrayOfStringType = new Type("Array<string>");
       expect(arrayOfStringType.checks(["test"])).toBe(true);
       expect(arrayOfStringType.checks(["test", "test2"])).toBe(true);
       expect(arrayOfStringType.checks(["test", 2])).toBe(false);
       expect(arrayOfStringType.checks(4)).toBe(false);
     });
-    test("Set class with generic type", ()=>{
+    test("Set class with generic type", () => {
       const setOfStringType = new Type("Set<number>");
-      expect(setOfStringType.checks( new Set([1, 2, 1]))).toBe(true);
+      expect(setOfStringType.checks(new Set([1, 2, 1]))).toBe(true);
       expect(setOfStringType.checks(new Set([1, "test", 1]))).toBe(false);
       expect(setOfStringType.checks(["test", "test2"])).toBe(false);
     });
-    test("Map class with generic type for key and values", ()=>{
+    test("Map class with generic type for key and values", () => {
       const setOfStringType = new Type("Map<string, number>");
-      expect(setOfStringType.checks( new Map([["one", 1], ["two", 2]]))).toBe(true);
-      expect(setOfStringType.checks( new Map([[1, 1], ["two", 2]]))).toBe(false);
-      expect(setOfStringType.checks( new Map([["one", 1], ["two", "2"]]))).toBe(false);
+      expect(
+        setOfStringType.checks(
+          new Map([
+            ["one", 1],
+            ["two", 2],
+          ])
+        )
+      ).toBe(true);
+      expect(
+        setOfStringType.checks(
+          new Map([
+            [1, 1],
+            ["two", 2],
+          ])
+        )
+      ).toBe(false);
+      expect(
+        setOfStringType.checks(
+          new Map([
+            ["one", 1],
+            ["two", "2"],
+          ])
+        )
+      ).toBe(false);
       expect(setOfStringType.checks(["test", "test2"])).toBe(false);
     });
   });
