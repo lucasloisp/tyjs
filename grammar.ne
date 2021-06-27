@@ -52,4 +52,5 @@ ATOMIC ->
   | %Any {% () => ty.anyType() %}
   | LITERAL {% ([v]) => v %}
   | %LeftPar _ AND _ %RightPar {% ([_, _2, fst]) => fst %}
+  | %Class %Lt AND %Gt {% ([fst, _, snd, _2]) => ty.and(ty.classType(fst.value), ty.sequenceType([snd])) %}
   | %Class {% ([fst]) => ty.classType(fst.value) %}

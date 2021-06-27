@@ -153,9 +153,13 @@ function regexType(regex) {
 }
 
 function matchSequenceType(seq) {
-  if (!seq || !seq.every) {
+  if (!seq) {
     return false;
   }
+  if(!(seq instanceof Array)) {
+    seq = Array.from(seq);
+  }
+
   let valueIx = 0;
   for (let typeIx = 0; typeIx < this.left.length; typeIx++) {
     const type = this.left[typeIx];

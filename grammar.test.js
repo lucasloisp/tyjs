@@ -257,9 +257,19 @@ describe("the language's grammar", () => {
     });
   });
   describe("the class type", ()=>{
-    expectToUnambiguouslyEvaluateTo(
-        "Date",
-        ty.classType("Date")
-    );
+    test("a basic class type", () =>{
+      expectToUnambiguouslyEvaluateTo(
+          "Date",
+          ty.classType("Date")
+      );
+    });
+    test("a class with a generic type", () =>{
+      expectToUnambiguouslyEvaluateTo(
+          "Array<string>",
+          ty.and(ty.classType("Array"), ty.sequenceType([ty.stringType()]))
+      );
+    });
+
   })
+
 });

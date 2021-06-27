@@ -231,6 +231,7 @@ describe("the type checker", () => {
     describe("single type sequences", () => {
       test("a homogeneous number sequence", () => {
         const numberSequence = new Type("[ ...number ]");
+        expect(numberSequence.checks([])).toBe(true);
         expect(numberSequence.checks([1])).toBe(true);
         expect(numberSequence.checks(["hello"])).toBe(false);
         expect(numberSequence.checks("hello")).toBe(false);
@@ -344,18 +345,31 @@ describe("the type checker", () => {
       expect(dateClass.checks(2)).toBe(false);
     });
     test("custom js class", ()=>{
-      const dateClass = new Type("CustomClass");
+      const customClass = new Type("CustomClass");
       class CustomClass{}
-      expect(dateClass.checks(new CustomClass())).toBe(true);
-      expect(dateClass.checks(new Date())).toBe(false);
+      expect(customClass.checks(new CustomClass())).toBe(true);
+      expect(customClass.checks(new Date())).toBe(false);
     });
     test("custom function constructor", ()=>{
-      const dateClass = new Type("CustomConstructor");
+      const customConstructorClass = new Type("CustomConstructor");
       function CustomConstructor(){
         this.test = "Hello";
       }
-      expect(dateClass.checks(new CustomConstructor())).toBe(true);
-      expect(dateClass.checks(new Date())).toBe(false);
+      expect(customConstructorClass.checks(new CustomConstructor())).toBe(true);
+      expect(customConstructorClass.checks(new Date())).toBe(false);
+    });
+    test("Array class with generic type", ()=>{
+      const arrayOfStringType = new Type("Array<string>");
+      expect(arrayOfStringType.checks(["test"])).toBe(true);
+      expect(arrayOfStringType.checks(["test", "test2"])).toBe(true);
+      expect(arrayOfStringType.checks(["test", 2])).toBe(false);
+      expect(arrayOfStringType.checks(4)).toBe(false);
+    });
+    test("Set class with generic type", ()=>{
+      const setOfStringType = new Type("Set<number>");
+      expect(setOfStringType.checks( new Set([1, 2, 1]))).toBe(true);
+      expect(setOfStringType.checks(new Set([1, "test", 1]))).toBe(false);
+      expect(setOfStringType.checks(["test", "test2"])).toBe(false);
     });
   });
 });

@@ -21,6 +21,8 @@ module.exports = moo.compile({
   Minus: ["-"],
   LeftPar: ["("],
   RightPar: [")"],
+  Gt: [">"],
+  Lt: ["<"],
   Undefined: ["undefined"],
   Boolean: ["boolean"],
   Number: ["number"],
