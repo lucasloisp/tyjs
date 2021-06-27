@@ -336,4 +336,26 @@ describe("the type checker", () => {
       });
     });
   });
+  describe("the class type", () => {
+    test("basic js class", ()=>{
+      const dateClass = new Type("Date");
+      expect(dateClass.checks(new Date())).toBe(true);
+      expect(dateClass.checks(BigInt(2))).toBe(false);
+      expect(dateClass.checks(2)).toBe(false);
+    });
+    test("custom js class", ()=>{
+      const dateClass = new Type("CustomClass");
+      class CustomClass{}
+      expect(dateClass.checks(new CustomClass())).toBe(true);
+      expect(dateClass.checks(new Date())).toBe(false);
+    });
+    test("custom function constructor", ()=>{
+      const dateClass = new Type("CustomConstructor");
+      function CustomConstructor(){
+        this.test = "Hello";
+      }
+      expect(dateClass.checks(new CustomConstructor())).toBe(true);
+      expect(dateClass.checks(new Date())).toBe(false);
+    });
+  });
 });

@@ -193,6 +193,19 @@ function sequenceType(elementTypes) {
   });
 }
 
+
+function matchClassType(obj){
+  return obj.constructor.name === this.left;
+}
+
+function classType(className) {
+  return typeCreator({
+    type: "class",
+    left: className,
+    match: matchClassType,
+  });
+}
+
 module.exports = {
   undefinedType,
   booleanType,
@@ -217,4 +230,5 @@ module.exports = {
   regexType,
   sequenceType,
   singleSeq,
+  classType
 };

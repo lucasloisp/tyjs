@@ -256,4 +256,10 @@ describe("the language's grammar", () => {
       expectToBeASyntaxError("[ ..., number]");
     });
   });
+  describe("the class type", ()=>{
+    expectToUnambiguouslyEvaluateTo(
+        "Date",
+        ty.classType("Date")
+    );
+  })
 });

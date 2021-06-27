@@ -37,4 +37,5 @@ module.exports = moo.compile({
   Any: ["any", "_"],
   Whitespace: [" "],
   BooleanLiteral: /true|false/,
+  Class: /[A-Z]\w*/
 });
