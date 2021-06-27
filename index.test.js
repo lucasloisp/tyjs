@@ -32,4 +32,45 @@ describe("the tyjs library", () => {
       expect(studentType.checks(bob)).toBe(false);
     });
   });
+  test("a tagged union type with classes and generics", () => {
+    class Box {
+      constructor(value) {
+        this.value = value;
+      }
+    }
+    class FixedLengthArray {
+      constructor(values) {
+        this.values = values;
+      }
+    }
+    const numberType = type(
+      '["boxed", Box<number | FixedLengthArray<4>>] | ["unboxed", number]'
+    );
+    numberType.classChecker(Box, (box, args) => {
+      const [valueType] = args;
+      return args.length === 1 && valueType(box.value);
+    });
+    numberType.classChecker(FixedLengthArray, (fixedArr, args) => {
+      const [lengthType] = args;
+      return (
+        args.length === 1 &&
+        fixedArr.values instanceof Array &&
+        lengthType(fixedArr.values.length)
+      );
+    });
+    let boxed1 = new Box(1);
+    let unboxed2 = 2;
+    let boxedArray = new Box(new FixedLengthArray([1, 2, 3, 4]));
+    let boxedArrayWrongLength = new Box(new FixedLengthArray([1, 2, 3]));
+    expect(numberType.checks(boxed1)).toBe(false);
+    expect(numberType.checks(unboxed2)).toBe(false);
+    expect(numberType.checks(boxedArray)).toBe(false);
+    expect(numberType.checks(boxedArrayWrongLength)).toBe(false);
+    expect(numberType.checks(["boxed", boxed1])).toBe(true);
+    expect(numberType.checks(["unboxed", unboxed2])).toBe(true);
+    expect(numberType.checks(["boxed", boxedArray])).toBe(true);
+    expect(numberType.checks(["boxed", boxedArrayWrongLength])).toBe(false);
+    expect(numberType.checks(["unboxed", boxed1])).toBe(false);
+    expect(numberType.checks(["boxed", unboxed2])).toBe(false);
+  });
 });
