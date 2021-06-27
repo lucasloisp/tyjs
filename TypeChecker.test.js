@@ -243,6 +243,8 @@ describe("the type checker", () => {
         expect(numberSequence.checks([1])).toBe(true);
         expect(numberSequence.checks(["hello"])).toBe(true);
         expect(numberSequence.checks("hello")).toBe(true);
+        expect(numberSequence.checks(1)).toBe(false);
+        expect(numberSequence.checks({ name: "Bob" })).toBe(false);
         expect(numberSequence.checks(null)).toBe(false);
       });
       test("strings are sequences of characters", () => {
@@ -255,7 +257,8 @@ describe("the type checker", () => {
       });
       test("objects are sequences", () => {
         const numberSequence = new Type("[ ...[string, number] ]");
-        expect(numberSequence.checks({ ["age"]: 2 })).toBe(true);
+        expect(numberSequence.checks(new Map([["age", 2]]))).toBe(true);
+        expect(numberSequence.checks({ ["age"]: 2 })).toBe(false);
         expect(numberSequence.checks(["hello"])).toBe(false);
         expect(numberSequence.checks("hello")).toBe(false);
         expect(numberSequence.checks(null)).toBe(false);
