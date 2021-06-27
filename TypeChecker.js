@@ -24,8 +24,14 @@ class Type {
     this.classCheckers.set("Map", mapChecker);
   }
 
+  getClassCheckerFor(cls) {
+    const checker = this.classCheckers.get(cls);
+    if (!checker) throw new Error(`${cls} has no checking for generics`);
+    return checker;
+  }
+
   checks(value) {
-    return this.typeTree.match(value, (cls) => this.classCheckers.get(cls));
+    return this.typeTree.match(value, (cls) => this.getClassCheckerFor(cls));
   }
 
   classChecker(cls, checker) {

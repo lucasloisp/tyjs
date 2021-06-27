@@ -198,11 +198,12 @@ function sequenceType(elementTypes) {
 }
 
 function matchClassType(obj, classCheckers) {
-  const classToMatch = obj.constructor.name;
+  const objectClass = obj.constructor.name;
+  const classToMatch = this.left;
   return (
-    classToMatch === this.left &&
+    objectClass === classToMatch &&
     (this.generics.length === 0 ||
-      classCheckers(classToMatch)(
+      classCheckers(objectClass)(
         obj,
         this.generics.map((t) => (v) => t.match(v))
       ))

@@ -422,5 +422,14 @@ describe("the type checker", () => {
       expect(numberBox.checks(new Box("hello"))).toBe(false);
       expect(numberBox.checks(1)).toBe(false);
     });
+    test("generics on a class without a checker are errors", () => {
+      class ClassWithoutChecker {
+        constructor() {}
+      }
+      const numberBox = new Type("ClassWithoutChecker<number>");
+      expect(() => numberBox.checks(new ClassWithoutChecker(1))).toThrow(
+        "ClassWithoutChecker has no checking for generics"
+      );
+    });
   });
 });
