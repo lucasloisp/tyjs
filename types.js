@@ -200,14 +200,34 @@ function sequenceType(elementTypes) {
   });
 }
 
-function matchClassType(obj) {
-  return obj.constructor.name === this.left;
+function matchClassGenerics(classToMatch, obj, generics) {
+  if (generics.length === 0) return true;
+  switch (classToMatch) {
+    case "Array":
+    case "Set":
+      return sequenceType(generics).match(obj);
+    case "Map":
+      return sequenceType([
+        sequenceType([singleSeq(generics[0]), singleSeq(generics[1])]),
+      ]).match(obj);
+    default:
+      return false;
+  }
 }
 
-function classType(className) {
+function matchClassType(obj) {
+  const classToMatch = obj.constructor.name;
+  return (
+    classToMatch === this.left &&
+    matchClassGenerics(classToMatch, obj, this.generics)
+  );
+}
+
+function classType(className, generics = []) {
   return typeCreator({
     type: "class",
     left: className,
+    generics,
     match: matchClassType,
   });
 }
