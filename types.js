@@ -193,11 +193,19 @@ function sequenceType(elementTypes) {
   });
 }
 function matchObjectTypes(obj) {
-  const lenghtOfLeft = Object.entries(this.left).length;
+  const lenghtOfLeft = this.left.length;
   const lenghtOfObj = Object.entries(obj).length;
   return (
     (lenghtOfLeft === lenghtOfObj || this.isOpen) &&
-    Object.entries(this.left).every(([prop, type]) => type.match(obj[prop]))
+    this.left.every(([prop, type]) => {
+      if (prop instanceof RegExp) {
+        const matchingProp = Object.keys(obj).find((key) => {
+          return !!key.toString().match(prop);
+        });
+        return type.match(obj[matchingProp]);
+      }
+      return type.match(obj[prop]);
+    })
   );
 }
 function objectsType(properties, isOpen) {

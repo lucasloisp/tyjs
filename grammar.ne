@@ -28,14 +28,18 @@ LITERAL ->
 OBJECT ->
     %LeftCurlyBracket 
     _ 
-    (%Property _ %Colon _ ATOMIC %Comma _ {% ([p, _, _2, _3 , v]) => ({[p]:v}) %}):* 
-    (%Property _ %Colon _ ATOMIC _ {% ([p, _, _2, _3, v]) => ({[p]:v}) %} | %Decomposition {% () => 'any' %} )
+    (KEYVALUEPAIR %Comma _ {% id %}):* 
+    (KEYVALUEPAIR _ {% id %} | %Decomposition {% () => 'any' %} )
     _ 
     %RightCurlyBracket
     {% ([lcb, _, tail, head]) => {
       const flag = head === 'any';
-      return ty.objectsType(Object.assign({}, ...tail, flag ? {} : head), flag); }           
+      return ty.objectsType([...tail, ...(flag ? [] : [head] ) ] , flag); }           
     %} 
+
+KEYVALUEPAIR -> 
+  %Property _ %Colon _ ATOMIC {% ([p, _, _2, _3 , v]) => ([p.value,v]) %}
+  | %RegexLiteral _ %Colon _ ATOMIC {% ([r, _, _2, _3 , v]) => ([new RegExp(r.value.slice(1,-1)),v]) %}
 
 SEQUENCE ->
     %LeftSquareBracket

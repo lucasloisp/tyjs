@@ -373,6 +373,19 @@ describe("the type checker", () => {
           object.checks({ name: "Carlos", age: 44, height: "1,80", weight: 90 })
         ).toBe(true);
       });
+      test("Testing property with name given by regex", () => {
+        const object = new Type("{ /na+/: string, age: number }");
+        expect(object.checks({ ba: "Carlos", age: 44 })).toBe(false);
+        expect(object.checks({ na: "Carlos", age: 44 })).toBe(true);
+        expect(object.checks({ naaaaa: "Carlos", age: 44 })).toBe(true);
+        expect(object.checks({ naa: "Carlos", age: 44, naaa: "algo" })).toBe(
+          false
+        );
+      });
+      test("Test regex is a substring of the prop", () => {
+        const object = new Type("{ /na+/: string, age: number }");
+        expect(object.checks({ banana: "Carlos", age: 44 })).toBe(true);
+      });
     });
   });
 });
