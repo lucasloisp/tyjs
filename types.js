@@ -196,14 +196,15 @@ function matchObjectTypes(obj) {
   const lenghtOfLeft = Object.entries(this.left).length;
   const lenghtOfObj = Object.entries(obj).length;
   return (
-    lenghtOfLeft === lenghtOfObj &&
+    (lenghtOfLeft === lenghtOfObj || this.isOpen) &&
     Object.entries(this.left).every(([prop, type]) => type.match(obj[prop]))
   );
 }
-function objectsType(properties) {
+function objectsType(properties, isOpen) {
   return typeCreator({
     type: "objects",
     left: properties,
+    isOpen,
     match: matchObjectTypes,
   });
 }

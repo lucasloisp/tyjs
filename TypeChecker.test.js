@@ -348,7 +348,7 @@ describe("the type checker", () => {
       });
     });
     describe("the objects type", () => {
-      test("tuples can be typed", () => {
+      test("testing NORMAL object type", () => {
         const object = new Type("{ name: string, age: number }");
         expect(object.checks({ name: "Esteban", age: 44 })).toBe(true);
         expect(object.checks({ name: "Esteban", age: "44" })).toBe(false);
@@ -364,6 +364,14 @@ describe("the type checker", () => {
             ["name", "Esteban"],
           ])
         ).toBe(false);
+      });
+      test("testing decomposition in object", () => {
+        const object = new Type("{ name: string, age: number, ... }");
+        expect(object.checks({ name: "Carlos", age: 44 })).toBe(true);
+        expect(object.checks({ name: "Carlos", age: "44" })).toBe(false);
+        expect(
+          object.checks({ name: "Carlos", age: 44, height: "1,80", weight: 90 })
+        ).toBe(true);
       });
     });
   });

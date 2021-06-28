@@ -29,10 +29,13 @@ OBJECT ->
     %LeftCurlyBracket 
     _ 
     (%Property _ %Colon _ ATOMIC %Comma _ {% ([p, _, _2, _3 , v]) => ({[p]:v}) %}):* 
-    (%Property _ %Colon _ ATOMIC _ {% ([p, _, _2, _3, v]) => ({[p]:v}) %})
+    (%Property _ %Colon _ ATOMIC _ {% ([p, _, _2, _3, v]) => ({[p]:v}) %} | %Decomposition {% () => 'any' %} )
     _ 
     %RightCurlyBracket
-    {% ([lcb, _, tail, head]) => ty.objectsType(Object.assign({}, ...tail, head)) %}  
+    {% ([lcb, _, tail, head]) => {
+      const flag = head === 'any';
+      return ty.objectsType(Object.assign({}, ...tail, flag ? {} : head), flag); }           
+    %} 
 
 SEQUENCE ->
     %LeftSquareBracket
