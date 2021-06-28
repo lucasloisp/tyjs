@@ -89,4 +89,12 @@ describe("the types in TyJS", () => {
       });
     });
   });
+  describe("the class type", () => {
+    test("it handles a custom class type", () => {
+      expect(ty.classType("Date")).toMatchObject({
+        type: "class",
+        left: "Date",
+      });
+    });
+  });
 });

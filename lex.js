@@ -21,6 +21,8 @@ module.exports = moo.compile({
   Minus: ["-"],
   LeftPar: ["("],
   RightPar: [")"],
+  Gt: [">"],
+  Lt: ["<"],
   Undefined: ["undefined"],
   Boolean: ["boolean"],
   Number: ["number"],
@@ -37,4 +39,5 @@ module.exports = moo.compile({
   Any: ["any", "_"],
   Whitespace: [" "],
   BooleanLiteral: /true|false/,
+  Class: /[A-Z]\w*/,
 });

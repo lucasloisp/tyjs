@@ -256,4 +256,29 @@ describe("the language's grammar", () => {
       expectToBeASyntaxError("[ ..., number]");
     });
   });
+  describe("the class type", () => {
+    test("a basic class type", () => {
+      expectToUnambiguouslyEvaluateTo("Date", ty.classType("Date"));
+    });
+    test("a class with a generic type", () => {
+      expectToUnambiguouslyEvaluateTo(
+        "Array<string>",
+        ty.and(ty.classType("Array"), ty.sequenceType([ty.stringType()]))
+      );
+    });
+    test("a map like object with a generic type for key and value", () => {
+      expectToUnambiguouslyEvaluateTo(
+        "Map<string, string>",
+        ty.and(
+          ty.classType("Map"),
+          ty.sequenceType([
+            ty.sequenceType([
+              ty.singleSeq(ty.stringType()),
+              ty.singleSeq(ty.stringType()),
+            ]),
+          ])
+        )
+      );
+    });
+  });
 });
