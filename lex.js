@@ -5,6 +5,10 @@ const moo = require("moo");
 module.exports = moo.compile({
   StringLiteral: /"(?:\\["\\]|[^\n"\\])*"/,
   Decomposition: ["..."],
+  LeftCurlyBracket: ["{"],
+  Colon: [":"],
+  LeftCurlyBracket: ["{"],
+  RightCurlyBracket: ["}"],
   LeftSquareBracket: ["["],
   RightSquareBracket: ["]"],
   Comma: [","],
@@ -37,4 +41,5 @@ module.exports = moo.compile({
   Any: ["any", "_"],
   Whitespace: [" "],
   BooleanLiteral: /true|false/,
+  Property: /[A-Za-z0-9_]+/,
 });

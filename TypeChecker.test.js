@@ -334,6 +334,37 @@ describe("the type checker", () => {
         expect(numberSequence.checks("hello")).toBe(false);
         expect(numberSequence.checks(null)).toBe(false);
       });
+      test("sequences of a givn and then many anys", () => {
+        const numberSequence = new Type("[ number, ...]");
+        expect(numberSequence.checks([4])).toBe(true);
+        expect(numberSequence.checks([4, 4])).toBe(true);
+        expect(numberSequence.checks([1, "hello"])).toBe(true);
+        expect(numberSequence.checks([])).toBe(false);
+        expect(numberSequence.checks([1, 2, 3])).toBe(true);
+        expect(numberSequence.checks([1, "hello", "goodbye"])).toBe(true);
+        expect(numberSequence.checks(["hello", "goodbye"])).toBe(false);
+        expect(numberSequence.checks("hello")).toBe(false);
+        expect(numberSequence.checks(null)).toBe(false);
+      });
+    });
+    describe("the objects type", () => {
+      test("tuples can be typed", () => {
+        const object = new Type("{ name: string, age: number }");
+        expect(object.checks({ name: "Esteban", age: 44 })).toBe(true);
+        expect(object.checks({ name: "Esteban", age: "44" })).toBe(false);
+        expect(object.checks({ name: "Esteban", age: 44, height: 13 })).toBe(
+          false
+        );
+        expect(object.checks("Esteban")).toBe(false);
+        expect(object.checks({})).toBe(false);
+        expect(object.checks({ age: 44, name: "Esteban" })).toBe(true);
+        expect(
+          object.checks([
+            ["age", 44],
+            ["name", "Esteban"],
+          ])
+        ).toBe(false);
+      });
     });
   });
 });

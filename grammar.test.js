@@ -239,7 +239,7 @@ describe("the language's grammar", () => {
       expectToUnambiguouslyEvaluateTo('"hello"', ty.valueType("hello"));
     });
   });
-  describe("the sequence type", () => {
+  describe("the objects type", () => {
     test("it can type homogeneous sequences", () => {
       expectToUnambiguouslyEvaluateTo(
         "[ ...number ]",
@@ -256,4 +256,12 @@ describe("the language's grammar", () => {
       expectToBeASyntaxError("[ ..., number]");
     });
   });
+  // describe("the objects type", () => {
+  //   test("it can type homogeneous objects", () => {
+  //     expectToUnambiguouslyEvaluateTo(
+  //       "{ name: string, age: number }",
+  //       ty.objectsType([ty.objectsType()])
+  //     );
+  //   });
+  // });
 });

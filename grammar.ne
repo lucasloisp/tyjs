@@ -24,6 +24,16 @@ LITERAL ->
   | %Hexadecimal {% ([v]) => ty.valueType(parseInt(v)) %}
   | %NumberLiteral {% ([v]) => ty.valueType(parseFloat(v)) %}
   | %RegexLiteral {% ([v]) => ty.regexType(new RegExp(v.value.slice(1,-1))) %}
+
+OBJECT ->
+    %LeftCurlyBracket 
+    _ 
+    (%Property _ %Colon _ ATOMIC %Comma _ {% ([p, _, _2, _3 , v]) => ({[p]:v}) %}):* 
+    (%Property _ %Colon _ ATOMIC _ {% ([p, _, _2, _3, v]) => ({[p]:v}) %})
+    _ 
+    %RightCurlyBracket
+    {% ([lcb, _, tail, head]) => ty.objectsType(Object.assign({}, ...tail, head)) %}  
+
 SEQUENCE ->
     %LeftSquareBracket
     _
@@ -36,6 +46,7 @@ SEQUENCE ->
     {% ([lsb, _, tail, head]) => ty.sequenceType([...tail, head]) %}
 ATOMIC ->
     %Undefined {% () => ty.undefinedType() %}
+  | OBJECT {% ([v]) => v %}
   | SEQUENCE {% ([v]) => v %}
   | %Boolean {% () => ty.booleanType() %}
   | %Number {% () => ty.numberType() %}

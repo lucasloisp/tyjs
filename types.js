@@ -192,6 +192,21 @@ function sequenceType(elementTypes) {
     match: matchSequenceType,
   });
 }
+function matchObjectTypes(obj) {
+  const lenghtOfLeft = Object.entries(this.left).length;
+  const lenghtOfObj = Object.entries(obj).length;
+  return (
+    lenghtOfLeft === lenghtOfObj &&
+    Object.entries(this.left).every(([prop, type]) => type.match(obj[prop]))
+  );
+}
+function objectsType(properties) {
+  return typeCreator({
+    type: "objects",
+    left: properties,
+    match: matchObjectTypes,
+  });
+}
 
 module.exports = {
   undefinedType,
@@ -217,4 +232,5 @@ module.exports = {
   regexType,
   sequenceType,
   singleSeq,
+  objectsType,
 };
