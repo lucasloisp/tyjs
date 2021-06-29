@@ -362,6 +362,19 @@ describe("the type checker", () => {
         expect(numberSequence.checks("hello")).toBe(false);
         expect(numberSequence.checks(null)).toBe(false);
       });
+      test("sequences of multiple element types", () => {
+        const sequence = new Type("[ string, ...3 * boolean, ...number, ... ]");
+        expect(sequence.checks([])).toBe(false);
+        expect(sequence.checks(["Alice"])).toBe(false);
+        expect(sequence.checks(["Alice", true])).toBe(false);
+        expect(sequence.checks(["Alice", true, false])).toBe(false);
+        expect(sequence.checks(["Alice", true, false, true])).toBe(true);
+        expect(sequence.checks(["Alice", true, false, true, 1, 2])).toBe(true);
+        expect(sequence.checks(["Alice", 1, true, false, true, 1])).toBe(false);
+        expect(sequence.checks([true, false, true, 1, 2])).toBe(false);
+        expect(sequence.checks(["Bob", true, false, true, 1, null])).toBe(true);
+        expect(sequence.checks(["Alice", true, false, true, null])).toBe(true);
+      });
     });
   });
   describe("the class type", () => {
