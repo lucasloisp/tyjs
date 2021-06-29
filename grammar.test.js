@@ -252,8 +252,73 @@ describe("the language's grammar", () => {
         ty.sequenceType([ty.anyType()])
       );
     });
+    test("a sequence can have n occurrences of a type", () => {
+      expectToUnambiguouslyEvaluateTo(
+        "[ ...3 * number ]",
+        ty.sequenceType([
+          ty.singleSeq(ty.numberType()),
+          ty.singleSeq(ty.numberType()),
+          ty.singleSeq(ty.numberType()),
+        ])
+      );
+      expectToUnambiguouslyEvaluateTo(
+        "[ number, ...3 * number ]",
+        ty.sequenceType([
+          ty.singleSeq(ty.numberType()),
+          ty.singleSeq(ty.numberType()),
+          ty.singleSeq(ty.numberType()),
+          ty.singleSeq(ty.numberType()),
+        ])
+      );
+    });
+    test("a sequence can have elements of the sequence type", () => {
+      const nestedSeq = ty.sequenceType([
+        ty.singleSeq(ty.stringType()),
+        ty.singleSeq(ty.bigintType()),
+        ty.singleSeq(ty.bigintType()),
+        ty.singleSeq(ty.numberType()),
+      ]);
+      expectToUnambiguouslyEvaluateTo(
+        "[ number, ...3 * [ string, ...2 * bigint, number] ]",
+        ty.sequenceType([
+          ty.singleSeq(ty.numberType()),
+          ty.singleSeq(nestedSeq),
+          ty.singleSeq(nestedSeq),
+          ty.singleSeq(nestedSeq),
+        ])
+      );
+    });
     test.skip("sequence of any can only go last", () => {
       expectToBeASyntaxError("[ ..., number]");
+    });
+  });
+  describe("the class type", () => {
+    test("a basic class type", () => {
+      expectToUnambiguouslyEvaluateTo("Date", ty.classType("Date"));
+    });
+    test("a class with a generic type", () => {
+      expectToUnambiguouslyEvaluateTo(
+        "Array<string>",
+        ty.classType("Array", [ty.stringType()])
+      );
+    });
+    test("a map like object with a generic type for key and value", () => {
+      expectToUnambiguouslyEvaluateTo(
+        "Map<string, string>",
+        ty.classType("Map", [ty.stringType(), ty.stringType()])
+      );
+    });
+    test("a class with multiple generics", () => {
+      expectToUnambiguouslyEvaluateTo(
+        "CustomClass<number, bigint, string, any, void>",
+        ty.classType("CustomClass", [
+          ty.numberType(),
+          ty.bigintType(),
+          ty.stringType(),
+          ty.anyType(),
+          ty.voidType(),
+        ])
+      );
     });
   });
 });

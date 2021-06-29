@@ -38,16 +38,20 @@ OBJECT ->
     %} 
 
 KEYVALUEPAIR -> 
-  %Property _ %Colon _ ATOMIC {% ([p, _, _2, _3 , v]) => ([p.value,v]) %}
+  %Property  _ ATOMIC {% ([p, _ , v]) => ([p.value.slice(0,-1),v]) %}
   | %RegexLiteral _ %Colon _ ATOMIC {% ([r, _, _2, _3 , v]) => ([new RegExp(r.value.slice(1,-1)),v]) %}  
   | %Decomposition %RegexLiteral _ %Colon _ ATOMIC {% ([_, r, _2, _3, _4 , v]) => ([new RegExp(r.value.slice(1,-1)),v,"many"]) %}
 
+SEQUENCEELEMENT ->
+    ATOMIC {% ([v]) => ty.singleSeq(v) %}
+  | %Decomposition ATOMIC {% ([_, v]) => v %}
+  | %Decomposition %IntegerLiteral _ ATOMIC
+    {% ([_, sqc, _1, v]) => ty.times(v, parseInt(sqc.value)) %}
 SEQUENCE ->
     %LeftSquareBracket
     _
-    (ATOMIC %Comma _ {% ([v]) => ty.singleSeq(v) %} | %Decomposition ATOMIC %Comma _ {% ([_, v]) => v %}):*
-    (ATOMIC _ {% ([v]) => ty.singleSeq(v) %}
-     | %Decomposition ATOMIC {% ([_, v]) => v %}
+    (SEQUENCEELEMENT %Comma _ {% id %}):*
+    (SEQUENCEELEMENT {% id %}
      | %Decomposition {% () =>  ty.anyType() %})
     _
     %RightSquareBracket
@@ -71,3 +75,6 @@ ATOMIC ->
   | %Any {% () => ty.anyType() %}
   | LITERAL {% ([v]) => v %}
   | %LeftPar _ AND _ %RightPar {% ([_, _2, fst]) => fst %}
+  | %Class %Lt (AND %Comma _ {% id %}):* AND %Gt
+    {% ([cls, _, tail, head]) => ty.classType(cls.value, [...tail, head]) %}
+  | %Class {% ([fst]) => ty.classType(fst.value) %}

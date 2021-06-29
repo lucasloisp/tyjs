@@ -1,4 +1,3 @@
-
 const Type = require("./TypeChecker");
 
 function type(typeDescription) {
