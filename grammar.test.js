@@ -261,6 +261,32 @@ describe("the language's grammar", () => {
           ty.singleSeq(ty.numberType()),
         ])
       );
+      expectToUnambiguouslyEvaluateTo(
+        "[ number, ...3 * number ]",
+        ty.sequenceType([
+          ty.singleSeq(ty.numberType()),
+          ty.singleSeq(ty.numberType()),
+          ty.singleSeq(ty.numberType()),
+          ty.singleSeq(ty.numberType()),
+        ])
+      );
+    });
+    test("a sequence can have elements of the sequence type", () => {
+      const nestedSeq = ty.sequenceType([
+        ty.singleSeq(ty.stringType()),
+        ty.singleSeq(ty.bigintType()),
+        ty.singleSeq(ty.bigintType()),
+        ty.singleSeq(ty.numberType()),
+      ]);
+      expectToUnambiguouslyEvaluateTo(
+        "[ number, ...3 * [ string, ...2 * bigint, number] ]",
+        ty.sequenceType([
+          ty.singleSeq(ty.numberType()),
+          ty.singleSeq(nestedSeq),
+          ty.singleSeq(nestedSeq),
+          ty.singleSeq(nestedSeq),
+        ])
+      );
     });
     test.skip("sequence of any can only go last", () => {
       expectToBeASyntaxError("[ ..., number]");
