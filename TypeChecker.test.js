@@ -256,6 +256,15 @@ describe("the type checker", () => {
       test("objects are sequences", () => {
         const numberSequence = new Type("[ ...[string, number] ]");
         expect(numberSequence.checks({ ["age"]: 2 })).toBe(true);
+        expect(numberSequence.checks(new Map([["age", 2]]))).toBe(true);
+        expect(
+          numberSequence.checks(
+            new Map([
+              ["age", 2],
+              ["grade", 14],
+            ])
+          )
+        ).toBe(true);
         expect(numberSequence.checks(["hello"])).toBe(false);
         expect(numberSequence.checks("hello")).toBe(false);
         expect(numberSequence.checks(null)).toBe(false);
@@ -414,6 +423,61 @@ describe("the type checker", () => {
         )
       ).toBe(false);
       expect(setOfStringType.checks(["test", "test2"])).toBe(false);
+    });
+    test("generic custom box class", () => {
+      class Box {
+        constructor(value) {
+          this.value = value;
+        }
+      }
+      const numberBox = new Type("Box<number>");
+      numberBox.classChecker(Box, (box, args) => {
+        return args.length === 1 && args[0](box.value);
+      });
+      expect(numberBox.checks(new Box(1))).toBe(true);
+      expect(numberBox.checks(new Box("hello"))).toBe(false);
+      expect(numberBox.checks(1)).toBe(false);
+    });
+    test("generics on a class without a checker are errors", () => {
+      class ClassWithoutChecker {
+        constructor() {}
+      }
+      const numberBox = new Type("ClassWithoutChecker<number>");
+      expect(() => numberBox.checks(new ClassWithoutChecker(1))).toThrow(
+        "ClassWithoutChecker has no checking for generics"
+      );
+    });
+    test("generics work in an inner type-node", () => {
+      class Box {
+        constructor(value) {
+          this.value = value;
+        }
+      }
+      const numberBox = new Type("Box<number> | number");
+      numberBox.classChecker(Box, (box, args) => {
+        return args.length === 1 && args[0](box.value);
+      });
+      expect(numberBox.checks(new Box(1))).toBe(true);
+      expect(numberBox.checks(new Box("hello"))).toBe(false);
+      expect(numberBox.checks(1)).toBe(true);
+      expect(numberBox.checks("hello")).toBe(false);
+    });
+    test("nested generic types", () => {
+      class Box {
+        constructor(value) {
+          this.value = value;
+        }
+      }
+      const numberBox = new Type("Box<Box<number>>");
+      numberBox.classChecker(Box, (box, args) => {
+        return args.length === 1 && args[0](box.value);
+      });
+      expect(numberBox.checks(new Box(new Box(1)))).toBe(true);
+      expect(numberBox.checks(new Box(new Box("hello")))).toBe(false);
+      expect(numberBox.checks(new Box(1))).toBe(false);
+      expect(numberBox.checks(new Box("hello"))).toBe(false);
+      expect(numberBox.checks(1)).toBe(false);
+      expect(numberBox.checks("hello")).toBe(false);
     });
   });
 });
