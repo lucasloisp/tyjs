@@ -86,16 +86,16 @@ function anyType() {
   return typeCreator({ type: "any", match: isAny });
 }
 
-function matchesNotType(value) {
-  return !this.left.match(value);
+function matchesNotType(value, ctx) {
+  return !this.left.match(value, ctx);
 }
 
 function not(type) {
   return typeCreator({ type: "not", left: type, match: matchesNotType });
 }
 
-function matchesAnd(value) {
-  return this.left.match(value) && this.right.match(value);
+function matchesAnd(value, ctx) {
+  return this.left.match(value, ctx) && this.right.match(value, ctx);
 }
 
 function and(typeL, typeR) {
@@ -107,8 +107,8 @@ function and(typeL, typeR) {
   });
 }
 
-function matchesOr(value) {
-  return this.left.match(value) || this.right.match(value);
+function matchesOr(value, ctx) {
+  return this.left.match(value, ctx) || this.right.match(value, ctx);
 }
 
 function or(typeL, typeR) {
@@ -152,7 +152,7 @@ function regexType(regex) {
   });
 }
 
-function matchSequenceType(seq) {
+function matchSequenceType(seq, ctx) {
   if (!seq || typeof seq[Symbol.iterator] !== "function") {
     return false;
   }
@@ -164,13 +164,13 @@ function matchSequenceType(seq) {
     if (type.type === "singleSeq") {
       if (valueIx >= seq.length) return false;
       const value = seq[valueIx++];
-      if (!type.left.match(value)) {
+      if (!type.left.match(value, ctx)) {
         return false;
       }
     } else {
       while (valueIx < seq.length) {
         const value = seq[valueIx];
-        if (!type.match(value)) {
+        if (!type.match(value, ctx)) {
           break;
         }
         valueIx++;
@@ -195,14 +195,24 @@ function sequenceType(elementTypes) {
   });
 }
 
-function matchClassType(obj) {
-  return obj.constructor.name === this.left;
+function matchClassType(obj, ctx) {
+  const objectClass = obj.constructor.name;
+  const classToMatch = this.left;
+  return (
+    objectClass === classToMatch &&
+    (this.generics.length === 0 ||
+      ctx.classCheckers(objectClass)(
+        obj,
+        this.generics.map((t) => (v) => t.match(v, ctx))
+      ))
+  );
 }
 
-function classType(className) {
+function classType(className, generics = []) {
   return typeCreator({
     type: "class",
     left: className,
+    generics,
     match: matchClassType,
   });
 }
