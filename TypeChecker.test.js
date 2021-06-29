@@ -386,6 +386,10 @@ describe("the type checker", () => {
         const object = new Type("{ /na+/: string, age: number }");
         expect(object.checks({ banana: "Carlos", age: 44 })).toBe(true);
       });
+      test("Test regex in multiple parameters", () => {
+        const object = new Type("{ /na+/: string, /js+/: number }");
+        expect(object.checks({ banana: "Carlos", jsjsjs: 44 })).toBe(true);
+      });
     });
   });
 });

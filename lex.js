@@ -21,7 +21,7 @@ module.exports = moo.compile({
   NumberLiteral:
     /[-+]?(?:(?:(?:\d+\.\d*)|(?:\d*\.?\d+))(?:e[+-]?\d+)?)|[-+]?\d+/,
   IntegerLiteral: /\.\.\.\d+/,
-  RegexLiteral: /\/.*\//,
+  RegexLiteral: /\/(?:[^/]|\\\/)*\//,
   Minus: ["-"],
   LeftPar: ["("],
   RightPar: [")"],
