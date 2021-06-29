@@ -153,12 +153,10 @@ function regexType(regex) {
 }
 
 function matchSequenceType(seq, ctx) {
-  if (!seq) {
+  if (!seq || typeof seq[Symbol.iterator] !== "function") {
     return false;
   }
-  if (!(seq instanceof Array)) {
-    seq = Array.from(seq);
-  }
+  seq = Array.from(seq);
 
   let valueIx = 0;
   for (let typeIx = 0; typeIx < this.left.length; typeIx++) {
