@@ -390,9 +390,30 @@ describe("the type checker", () => {
         const object = new Type("{ /na+/: string, /js+/: number }");
         expect(object.checks({ banana: "Carlos", jsjsjs: 44 })).toBe(true);
       });
-      test("new", () => {
+      test("Test all values have a match", () => {
         const object = new Type("{ /n/: string, /na/: string }");
         expect(object.checks({ banana: "Carlos", jsjsjs: 44 })).toBe(false);
+      });
+      test("Decomposed Regexes", () => {
+        const object = new Type("{ .../n/: string, /ba/: string }");
+        expect(
+          object.checks({
+            negro: "Carlos",
+            n: "Esteban",
+            numb: "Linkin park",
+            ba: "nanasplit",
+          })
+        ).toBe(true);
+        expect(object.checks({ ba: "nanasplit" })).toBe(true);
+        expect(
+          object.checks({
+            negro: "Carlos",
+            n: "Esteban",
+            numb: "Linkin park",
+            ba: "nanasplit",
+            oh: "no ohnononono",
+          })
+        ).toBe(false);
       });
     });
   });

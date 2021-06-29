@@ -210,13 +210,18 @@ function matchObjectTypes(obj) {
       } else {
         isMatch = prop === key && type.match(val);
       }
-      if (isMatch) {
+      if (isMatch && !isDecomposed) {
         typeSet.delete(v);
       }
       return isMatch;
     });
   });
-  return (allValuesInObjectMatch || this.isOpen) && typeSet.size === 0;
+  const allTypesMatch = Array.from(typeSet).every(
+    ([prop, type, isDecomposed]) => {
+      return isDecomposed;
+    }
+  );
+  return (allValuesInObjectMatch || this.isOpen) && allTypesMatch;
 }
 function objectsType(properties, isOpen) {
   return typeCreator({

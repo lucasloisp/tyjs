@@ -256,12 +256,4 @@ describe("the language's grammar", () => {
       expectToBeASyntaxError("[ ..., number]");
     });
   });
-  // describe("the objects type", () => {
-  //   test("it can type homogeneous objects", () => {
-  //     expectToUnambiguouslyEvaluateTo(
-  //       "{ name: string, age: number }",
-  //       ty.objectsType([ty.objectsType()])
-  //     );
-  //   });
-  // });
 });
