@@ -196,26 +196,27 @@ function matchObjectTypes(obj) {
   const lenghtOfLeft = this.left.length;
   const lenghtOfObj = Object.entries(obj).length;
   // const decomposedRegex = this.left.some((element) => element.length === 3);
+  const typeSet = new Set(this.left);
   const allValuesInObjectMatch = Object.entries(obj).every(([key, val]) => {
-    return this.left.some(([prop, type]) => {
-      if (prop instanceof RegExp) {
-        return key.toString().match(prop) && type.match(val);
+    return this.left.some((v) => {
+      const [prop, type, isDecomposed] = v;
+      const isUsed = !typeSet.has(v);
+      if (isUsed) {
+        return false;
       }
-      return prop === key && type.match(val);
+      let isMatch;
+      if (prop instanceof RegExp) {
+        isMatch = key.toString().match(prop) && type.match(val);
+      } else {
+        isMatch = prop === key && type.match(val);
+      }
+      if (isMatch) {
+        typeSet.delete(v);
+      }
+      return isMatch;
     });
   });
-  return (
-    ((lenghtOfLeft === lenghtOfObj && allValuesInObjectMatch) || this.isOpen) &&
-    this.left.every(([prop, type]) => {
-      if (prop instanceof RegExp) {
-        const matchingProp = Object.keys(obj).find((key) => {
-          return !!key.toString().match(prop);
-        });
-        return type.match(obj[matchingProp]);
-      }
-      return type.match(obj[prop]);
-    })
-  );
+  return (allValuesInObjectMatch || this.isOpen) && typeSet.size === 0;
 }
 function objectsType(properties, isOpen) {
   return typeCreator({
