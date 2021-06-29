@@ -390,6 +390,10 @@ describe("the type checker", () => {
         const object = new Type("{ /na+/: string, /js+/: number }");
         expect(object.checks({ banana: "Carlos", jsjsjs: 44 })).toBe(true);
       });
+      test("new", () => {
+        const object = new Type("{ /n/: string, /na/: string }");
+        expect(object.checks({ banana: "Carlos", jsjsjs: 44 })).toBe(false);
+      });
     });
   });
 });

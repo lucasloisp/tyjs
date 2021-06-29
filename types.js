@@ -195,8 +195,17 @@ function sequenceType(elementTypes) {
 function matchObjectTypes(obj) {
   const lenghtOfLeft = this.left.length;
   const lenghtOfObj = Object.entries(obj).length;
+  // const decomposedRegex = this.left.some((element) => element.length === 3);
+  const allValuesInObjectMatch = Object.entries(obj).every(([key, val]) => {
+    return this.left.some(([prop, type]) => {
+      if (prop instanceof RegExp) {
+        return key.toString().match(prop) && type.match(val);
+      }
+      return prop === key && type.match(val);
+    });
+  });
   return (
-    (lenghtOfLeft === lenghtOfObj || this.isOpen) &&
+    ((lenghtOfLeft === lenghtOfObj && allValuesInObjectMatch) || this.isOpen) &&
     this.left.every(([prop, type]) => {
       if (prop instanceof RegExp) {
         const matchingProp = Object.keys(obj).find((key) => {

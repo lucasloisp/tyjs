@@ -28,8 +28,8 @@ LITERAL ->
 OBJECT ->
     %LeftCurlyBracket 
     _ 
-    (KEYVALUEPAIR %Comma _ {% id %}):* 
-    (KEYVALUEPAIR _ {% id %} | %Decomposition {% () => 'any' %} )
+    (KEYVALUEPAIR %Comma _ {% id %} ):* 
+    (KEYVALUEPAIR _ {% id %} | %Decomposition {% () => 'any' %})
     _ 
     %RightCurlyBracket
     {% ([lcb, _, tail, head]) => {
@@ -39,7 +39,8 @@ OBJECT ->
 
 KEYVALUEPAIR -> 
   %Property _ %Colon _ ATOMIC {% ([p, _, _2, _3 , v]) => ([p.value,v]) %}
-  | %RegexLiteral _ %Colon _ ATOMIC {% ([r, _, _2, _3 , v]) => ([new RegExp(r.value.slice(1,-1)),v]) %}
+  | %RegexLiteral _ %Colon _ ATOMIC {% ([r, _, _2, _3 , v]) => ([new RegExp(r.value.slice(1,-1)),v]) %}  
+  | %Decomposition %RegexLiteral _ %Colon _ ATOMIC {% ([_, r, _2, _3, _4 , v]) => ([new RegExp(r.value.slice(1,-1)),v,1]) %}
 
 SEQUENCE ->
     %LeftSquareBracket
