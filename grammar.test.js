@@ -253,11 +253,6 @@ describe("the language's grammar", () => {
       );
     });
     test("a sequence can have n occurrences of a type", () => {
-      const lexer = require("./lex");
-      lexer.reset("[ ...3 * number ]");
-      for (const token of lexer) {
-        console.log(token);
-      }
       expectToUnambiguouslyEvaluateTo(
         "[ ...3 * number ]",
         ty.sequenceType([
