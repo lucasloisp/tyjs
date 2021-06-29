@@ -195,7 +195,6 @@ function sequenceType(elementTypes) {
 function matchObjectTypes(obj) {
   const lenghtOfLeft = this.left.length;
   const lenghtOfObj = Object.entries(obj).length;
-  console.log(this.left);
   return (
     (lenghtOfLeft === lenghtOfObj || this.isOpen) &&
     this.left.every(([prop, type]) => {
