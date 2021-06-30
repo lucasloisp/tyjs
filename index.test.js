@@ -3,7 +3,7 @@ const { type } = require("./index.js");
 describe("the tyjs library", () => {
   describe("checking for types", () => {
     test("a three digit number type", () => {
-      const threeDigitNumberType = type("number & /\\d{3}/");
+      const threeDigitNumberType = type`number & /\\d{3}/`;
       for (let i = 100; i < 1000; i++) {
         expect(threeDigitNumberType.checks(i)).toBe(true);
       }
@@ -21,7 +21,7 @@ describe("the tyjs library", () => {
           this.grade = grade;
         }
       }
-      const studentType = type("Student<string>");
+      const studentType = type`Student<string>`;
       studentType.classChecker(Student, (studentValue, args) => {
         const [gradeType] = args;
         return args.length === 1 && gradeType(studentValue.grade);
@@ -43,9 +43,7 @@ describe("the tyjs library", () => {
         this.values = values;
       }
     }
-    const numberType = type(
-      '["boxed", Box<number | FixedLengthArray<4>>] | ["unboxed", number]'
-    );
+    const numberType = type`["boxed", Box<number | FixedLengthArray<4>>] | ["unboxed", number]`;
     numberType.classChecker(Box, (box, args) => {
       const [valueType] = args;
       return args.length === 1 && valueType(box.value);
