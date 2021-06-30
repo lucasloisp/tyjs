@@ -129,7 +129,7 @@ describe("the language's grammar", () => {
       test("it interacts with the and operator", () => {
         expectToUnambiguouslyEvaluateTo(
           "int | number & byte",
-          ty.and(ty.or(ty.intType(), ty.numberType()), ty.byteType())
+          ty.or(ty.intType(), ty.and(ty.numberType(), ty.byteType()))
         );
       });
       test("it associates to the left", () => {
@@ -153,22 +153,15 @@ describe("the language's grammar", () => {
       test("it works with conjunctions and disjunctions", () => {
         expectToUnambiguouslyEvaluateTo(
           "number - int & string",
-          ty.and(ty.minus(ty.numberType(), ty.intType()), ty.stringType())
+          ty.minus(ty.numberType(), ty.and(ty.intType(), ty.stringType()))
         );
         expectToUnambiguouslyEvaluateTo(
           "number | boolean - int & string",
-          ty.and(
-            ty.minus(ty.or(ty.numberType(), ty.booleanType()), ty.intType()),
-            ty.stringType()
+          ty.minus(
+            ty.or(ty.numberType(), ty.booleanType()), ty.and(ty.intType(),
+            ty.stringType())
           )
         );
-        // expectToUnambiguouslyEvaluateTo(
-        //     "number | boolean - int & string",
-        //     ty.and(
-        //         ty.or(ty.numberType(), ty.booleanType()),
-        //         ty.not(ty.and(ty.intType(), ty.stringType()))
-        //     )
-        // )
       });
     });
   });
