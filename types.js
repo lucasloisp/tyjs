@@ -205,7 +205,6 @@ function sequenceType(elementTypes) {
 function matchObjectTypes(obj) {
   const lenghtOfLeft = this.left.length;
   const lenghtOfObj = Object.entries(obj).length;
-  // const decomposedRegex = this.left.some((element) => element.length === 3);
   const typeSet = new Set(this.left);
   const allValuesInObjectMatch = Object.entries(obj).every(([key, val]) => {
     return this.left.some((v) => {
@@ -234,19 +233,19 @@ function matchObjectTypes(obj) {
   return (allValuesInObjectMatch || this.isOpen) && allTypesMatch;
 }
 function objectsType(properties, isOpen) {
-  const properties2 = [];
+  const expandedProperties = [];
   for (const [prop, value, count] of properties) {
     if (!count || count === "many") {
-      properties2.push([prop, value, count]);
+      expandedProperties.push([prop, value, count]);
     } else {
       for (let i = 0; i < count; i++) {
-        properties2.push([prop, value]);
+        expandedProperties.push([prop, value]);
       }
     }
   }
   return typeCreator({
     type: "objects",
-    left: properties2,
+    left: expandedProperties,
     isOpen,
     match: matchObjectTypes,
   });

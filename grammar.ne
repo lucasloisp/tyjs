@@ -59,7 +59,7 @@ SEQUENCE ->
     {% ([lsb, _, tail, head]) => ty.sequenceType([...tail, head]) %}
 ATOMIC ->
     %Undefined {% () => ty.undefinedType() %}
-  | OBJECT {% ([v]) => v %}
+  | OBJECT {% id %}
   | SEQUENCE {% ([v]) => v %}
   | %Boolean {% () => ty.booleanType() %}
   | %Number {% () => ty.numberType() %}
