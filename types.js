@@ -202,6 +202,54 @@ function sequenceType(elementTypes) {
     match: matchSequenceType,
   });
 }
+function matchObjectTypes(obj) {
+  const lenghtOfLeft = this.left.length;
+  const lenghtOfObj = Object.entries(obj).length;
+  const typeSet = new Set(this.left);
+  const allValuesInObjectMatch = Object.entries(obj).every(([key, val]) => {
+    return this.left.some((v) => {
+      const [prop, type, isDecomposed] = v;
+      const isUsed = !typeSet.has(v);
+      if (isUsed) {
+        return false;
+      }
+      let isMatch;
+      if (prop instanceof RegExp) {
+        isMatch = key.toString().match(prop) && type.match(val);
+      } else {
+        isMatch = prop === key && type.match(val);
+      }
+      if (isMatch && !isDecomposed) {
+        typeSet.delete(v);
+      }
+      return isMatch;
+    });
+  });
+  const allTypesMatch = Array.from(typeSet).every(
+    ([prop, type, isDecomposed]) => {
+      return isDecomposed;
+    }
+  );
+  return (allValuesInObjectMatch || this.isOpen) && allTypesMatch;
+}
+function objectsType(properties, isOpen) {
+  const expandedProperties = [];
+  for (const [prop, value, count] of properties) {
+    if (!count || count === "many") {
+      expandedProperties.push([prop, value, count]);
+    } else {
+      for (let i = 0; i < count; i++) {
+        expandedProperties.push([prop, value]);
+      }
+    }
+  }
+  return typeCreator({
+    type: "objects",
+    left: expandedProperties,
+    isOpen,
+    match: matchObjectTypes,
+  });
+}
 
 function matchClassType(obj, ctx) {
   const objectClass = obj.constructor.name;
@@ -249,6 +297,7 @@ module.exports = {
   regexType,
   sequenceType,
   singleSeq,
+  objectsType,
   classType,
   times,
 };

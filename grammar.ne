@@ -24,6 +24,25 @@ LITERAL ->
   | %Hexadecimal {% ([v]) => ty.valueType(parseInt(v)) %}
   | %NumberLiteral {% ([v]) => ty.valueType(parseFloat(v)) %}
   | %RegexLiteral {% ([v]) => ty.regexType(new RegExp(v.value.slice(1,-1))) %}
+
+OBJECT ->
+    %LeftCurlyBracket 
+    _ 
+    (KEYVALUEPAIR %Comma _ {% id %} ):* 
+    (KEYVALUEPAIR _ {% id %} | %Decomposition {% () => 'any' %})
+    _ 
+    %RightCurlyBracket
+    {% ([lcb, _, tail, head]) => {
+      const flag = head === 'any';
+      return ty.objectsType([...tail, ...(flag ? [] : [head] ) ] , flag); }           
+    %} 
+
+KEYVALUEPAIR -> 
+  %Property  _ ATOMIC {% ([p, _ , v]) => ([p.value.slice(0,-1),v]) %}
+  | %RegexLiteral _ %Colon _ ATOMIC {% ([r, _, _2, _3 , v]) => ([new RegExp(r.value.slice(1,-1)),v]) %}  
+  | %Decomposition %RegexLiteral _ %Colon _ ATOMIC {% ([_, r, _2, _3, _4 , v]) => ([new RegExp(r.value.slice(1,-1)),v,"many"]) %}
+  | %Decomposition %IntegerLiteral _ %RegexLiteral _ %Colon _ ATOMIC {% ([_, il, _2, r, _4 , _5, _6, v]) => ([new RegExp(r.value.slice(1,-1)),v,parseInt(il.value)]) %}
+
 SEQUENCEELEMENT ->
     ATOMIC {% ([v]) => ty.singleSeq(v) %}
   | %Decomposition ATOMIC {% ([_, v]) => v %}
@@ -40,6 +59,7 @@ SEQUENCE ->
     {% ([lsb, _, tail, head]) => ty.sequenceType([...tail, head]) %}
 ATOMIC ->
     %Undefined {% () => ty.undefinedType() %}
+  | OBJECT {% id %}
   | SEQUENCE {% ([v]) => v %}
   | %Boolean {% () => ty.booleanType() %}
   | %Number {% () => ty.numberType() %}
