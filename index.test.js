@@ -71,4 +71,30 @@ describe("the tyjs library", () => {
     expect(numberType.checks(["unboxed", boxed1])).toBe(false);
     expect(numberType.checks(["boxed", unboxed2])).toBe(false);
   });
+
+  describe("type tag temlates functionality", ()=>{
+    test("no interpolation present", ()=>{
+      let numberType = type`number`;
+      expect(numberType.checks(1)).toBe(true);
+      expect(numberType.checks("not")).toBe(false);
+    });
+    test("one interpolation function", ()=>{
+      let numberType = type`number & ${v => v >= 0}`;
+      expect(numberType.checks(1)).toBe(true);
+      expect(numberType.checks("not")).toBe(false);
+      expect(numberType.checks(-1)).toBe(false);
+    });
+    test("multiple interpolation function", ()=>{
+      let numberType = type`number & ${v => v >= 0} & int & ${v => v <= 6}`;
+      expect(numberType.checks(1)).toBe(true);
+      expect(numberType.checks("not")).toBe(false);
+      expect(numberType.checks(-1)).toBe(false);
+      expect(numberType.checks(7)).toBe(false);
+      expect(numberType.checks(6)).toBe(true);
+      expect(numberType.checks(0)).toBe(true);
+    });
+    test("interpolated value is not a function", ()=>{
+      expect(()=> type`number & ${"not a function"}`).toThrow("Interpolated value is not a function");
+    });
+  });
 });
