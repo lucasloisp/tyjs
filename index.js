@@ -19,5 +19,5 @@ function type(typeDescriptionParts, ...f) {
 
 module.exports = {
   type,
-  Type
+  Type,
 };
