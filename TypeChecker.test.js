@@ -495,4 +495,22 @@ describe("the type checker", () => {
       expect(numberBox.checks("hello")).toBe(false);
     });
   });
+  describe("Syntax errors", () => {
+    test("syntax errors throw", () => {
+      expect(() => {
+        const myType = new Type("!");
+      }).toThrow("Syntax error");
+      expect(() => {
+        const myType = new Type("!___number");
+      }).toThrow("Syntax error");
+      expect(() => {
+        const myType = new Type("number | | string");
+      }).toThrow("Syntax error");
+    });
+    test("a bogus string does not codify a type", () => {
+      expect(() => {
+        const numberBox = new Type("This is a bogus string");
+      }).toThrow("Syntax error");
+    });
+  });
 });
