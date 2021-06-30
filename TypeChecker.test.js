@@ -271,6 +271,25 @@ describe("the type checker", () => {
         expect(numberSequence.checks("hello")).toBe(false);
         expect(numberSequence.checks(null)).toBe(false);
       });
+      test("sets are sequences, with insertion order", () => {
+        const myTriple = new Type("[ number, string, boolean ]");
+        const rightOrderSet = new Set();
+        rightOrderSet.add(1);
+        rightOrderSet.add("hello");
+        rightOrderSet.add(true);
+        const wrongOrderSet = new Set();
+        wrongOrderSet.add(1);
+        wrongOrderSet.add(true);
+        wrongOrderSet.add("hello");
+        const fallShortSet = new Set();
+        fallShortSet.add(1);
+        fallShortSet.add("hello");
+        expect(myTriple.checks(new Set([1, "hello", true]))).toBe(true);
+        expect(myTriple.checks(rightOrderSet)).toBe(true);
+        expect(myTriple.checks(wrongOrderSet)).toBe(false);
+        expect(myTriple.checks(new Set())).toBe(false);
+        expect(myTriple.checks(fallShortSet)).toBe(false);
+      });
       test("tuples can be typed", () => {
         const numberSequence = new Type("[ string, bigint, number ]");
         expect(numberSequence.checks(["hello", 1n, 1])).toBe(true);
