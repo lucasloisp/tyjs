@@ -16,6 +16,7 @@ AND ->
 NEG ->
     %Not NEG {% ([_, snd]) => ty.not(snd) %}
   | ATOMIC {% ([fst]) => fst %}
+
 LITERAL ->
     %StringLiteral {% ([v]) => ty.valueType(v.value.slice(1 ,-1)) %}
   | %BooleanLiteral {% ([v]) => ty.valueType(v == "true") %}
@@ -26,20 +27,20 @@ LITERAL ->
   | %RegexLiteral {% ([v]) => ty.regexType(new RegExp(v.value.slice(1,-1))) %}
 
 OBJECT ->
-    %LeftCurlyBracket 
-    _ 
-    (KEYVALUEPAIR %Comma _ {% id %} ):* 
+    %LeftCurlyBracket
+    _
+    (KEYVALUEPAIR %Comma _ {% id %} ):*
     (KEYVALUEPAIR _ {% id %} | %Decomposition {% () => 'any' %})
-    _ 
+    _
     %RightCurlyBracket
     {% ([lcb, _, tail, head]) => {
       const flag = head === 'any';
-      return ty.objectsType([...tail, ...(flag ? [] : [head] ) ] , flag); }           
-    %} 
+      return ty.objectsType([...tail, ...(flag ? [] : [head] ) ] , flag); }
+    %}
 
-KEYVALUEPAIR -> 
+KEYVALUEPAIR ->
   %Property  _ ATOMIC {% ([p, _ , v]) => ([p.value.slice(0,-1),v]) %}
-  | %RegexLiteral _ %Colon _ ATOMIC {% ([r, _, _2, _3 , v]) => ([new RegExp(r.value.slice(1,-1)),v]) %}  
+  | %RegexLiteral _ %Colon _ ATOMIC {% ([r, _, _2, _3 , v]) => ([new RegExp(r.value.slice(1,-1)),v]) %}
   | %Decomposition %RegexLiteral _ %Colon _ ATOMIC {% ([_, r, _2, _3, _4 , v]) => ([new RegExp(r.value.slice(1,-1)),v,"many"]) %}
   | %Decomposition %IntegerLiteral _ %RegexLiteral _ %Colon _ ATOMIC {% ([_, il, _2, r, _4 , _5, _6, v]) => ([new RegExp(r.value.slice(1,-1)),v,parseInt(il.value)]) %}
 
@@ -48,6 +49,7 @@ SEQUENCEELEMENT ->
   | %Decomposition ATOMIC {% ([_, v]) => v %}
   | %Decomposition %IntegerLiteral _ ATOMIC
     {% ([_, sqc, _1, v]) => ty.times(v, parseInt(sqc.value)) %}
+
 SEQUENCE ->
     %LeftSquareBracket
     _
@@ -57,6 +59,7 @@ SEQUENCE ->
     _
     %RightSquareBracket
     {% ([lsb, _, tail, head]) => ty.sequenceType([...tail, head]) %}
+
 ATOMIC ->
     %Undefined {% () => ty.undefinedType() %}
   | OBJECT {% id %}
