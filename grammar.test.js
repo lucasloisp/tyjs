@@ -158,8 +158,8 @@ describe("the language's grammar", () => {
         expectToUnambiguouslyEvaluateTo(
           "number | boolean - int & string",
           ty.minus(
-            ty.or(ty.numberType(), ty.booleanType()), ty.and(ty.intType(),
-            ty.stringType())
+            ty.or(ty.numberType(), ty.booleanType()),
+            ty.and(ty.intType(), ty.stringType())
           )
         );
       });
