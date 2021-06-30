@@ -239,59 +239,6 @@ describe("the language's grammar", () => {
       expectToUnambiguouslyEvaluateTo('"hello"', ty.valueType("hello"));
     });
   });
-  describe("the objects type", () => {
-    test("it can type homogeneous sequences", () => {
-      expectToUnambiguouslyEvaluateTo(
-        "[ ...number ]",
-        ty.sequenceType([ty.numberType()])
-      );
-    });
-    test("it can type a sequence of any type of elements", () => {
-      expectToUnambiguouslyEvaluateTo(
-        "[ ... ]",
-        ty.sequenceType([ty.anyType()])
-      );
-    });
-    test("a sequence can have n occurrences of a type", () => {
-      expectToUnambiguouslyEvaluateTo(
-        "[ ...3 * number ]",
-        ty.sequenceType([
-          ty.singleSeq(ty.numberType()),
-          ty.singleSeq(ty.numberType()),
-          ty.singleSeq(ty.numberType()),
-        ])
-      );
-      expectToUnambiguouslyEvaluateTo(
-        "[ number, ...3 * number ]",
-        ty.sequenceType([
-          ty.singleSeq(ty.numberType()),
-          ty.singleSeq(ty.numberType()),
-          ty.singleSeq(ty.numberType()),
-          ty.singleSeq(ty.numberType()),
-        ])
-      );
-    });
-    test("a sequence can have elements of the sequence type", () => {
-      const nestedSeq = ty.sequenceType([
-        ty.singleSeq(ty.stringType()),
-        ty.singleSeq(ty.bigintType()),
-        ty.singleSeq(ty.bigintType()),
-        ty.singleSeq(ty.numberType()),
-      ]);
-      expectToUnambiguouslyEvaluateTo(
-        "[ number, ...3 * [ string, ...2 * bigint, number] ]",
-        ty.sequenceType([
-          ty.singleSeq(ty.numberType()),
-          ty.singleSeq(nestedSeq),
-          ty.singleSeq(nestedSeq),
-          ty.singleSeq(nestedSeq),
-        ])
-      );
-    });
-    test.skip("sequence of any can only go last", () => {
-      expectToBeASyntaxError("[ ..., number]");
-    });
-  });
   describe("the class type", () => {
     test("a basic class type", () => {
       expectToUnambiguouslyEvaluateTo("Date", ty.classType("Date"));
