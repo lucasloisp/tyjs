@@ -6,16 +6,22 @@ const ty = require('./types');
 %}
 @lexer lexer
 @builtin "whitespace.ne"
+MINUS ->
+    MINUS _ %Minus _ OR {% ([fst, _, _2, _3, snd]) => ty.minus(fst, snd) %}
+  | OR  {% id %}
+
+OR ->
+    OR _ %Or _ AND {% ([fst, _, _2, _3, snd]) => ty.or(fst, snd) %}
+  | AND {% id %}
 
 AND ->
     AND _ %And _ NEG {% ([fst, _, _2, _3, snd]) => ty.and(fst, snd) %}
-  | AND _ %Or _ NEG {% ([fst, _, _2, _3, snd]) => ty.or(fst, snd) %}
-  | AND _ %Minus _ NEG {% ([fst, _, _2, _3, snd]) => ty.minus(fst, snd) %}
-  | NEG {% ([fst]) => fst %}
+  | NEG {% id %}
 
 NEG ->
     %Not NEG {% ([_, snd]) => ty.not(snd) %}
   | ATOMIC {% ([fst]) => fst %}
+
 LITERAL ->
     %StringLiteral {% ([v]) => ty.valueType(v.value.slice(1 ,-1)) %}
   | %BooleanLiteral {% ([v]) => ty.valueType(v == "true") %}
@@ -75,8 +81,8 @@ ATOMIC ->
   | %Byte {% () => ty.byteType() %}
   | %Any {% () => ty.anyType() %}
   | LITERAL {% ([v]) => v %}
-  | %LeftPar _ AND _ %RightPar {% ([_, _2, fst]) => fst %}
-  | %Class %Lt (AND %Comma _ {% id %}):* AND %Gt
+  | %LeftPar _ MINUS _ %RightPar {% ([_, _2, fst]) => fst %}
+  | %Class %Lt (MINUS %Comma _ {% id %}):* MINUS %Gt
     {% ([cls, _, tail, head]) => ty.classType(cls.value, [...tail, head]) %}
   | %Class {% ([fst]) => ty.classType(fst.value) %}
   | %CustomFnChecker {% ([fst]) => ty.checkFunctionType(parseInt(fst.value.slice(1))) %}
