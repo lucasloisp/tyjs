@@ -22,13 +22,6 @@ NEG ->
     %Not NEG {% ([_, snd]) => ty.not(snd) %}
   | ATOMIC {% ([fst]) => fst %}
 
-
-
-
-
-
-
-
 LITERAL ->
     %StringLiteral {% ([v]) => ty.valueType(v.value.slice(1 ,-1)) %}
   | %BooleanLiteral {% ([v]) => ty.valueType(v == "true") %}
