@@ -33,6 +33,13 @@ class Type {
     });
   }
 
+  demand(value) {
+    if (this.checks(value)) {
+      return value;
+    }
+    throw new TypeError();
+  }
+
   classChecker(cls, checker) {
     this.classCheckers.set(cls.name, checker);
   }
