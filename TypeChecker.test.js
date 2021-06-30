@@ -362,18 +362,6 @@ describe("the type checker", () => {
         expect(numberSequence.checks("hello")).toBe(false);
         expect(numberSequence.checks(null)).toBe(false);
       });
-      test("sequences of a givn and then many anys", () => {
-        const numberSequence = new Type("[ number, ...]");
-        expect(numberSequence.checks([4])).toBe(true);
-        expect(numberSequence.checks([4, 4])).toBe(true);
-        expect(numberSequence.checks([1, "hello"])).toBe(true);
-        expect(numberSequence.checks([])).toBe(false);
-        expect(numberSequence.checks([1, 2, 3])).toBe(true);
-        expect(numberSequence.checks([1, "hello", "goodbye"])).toBe(true);
-        expect(numberSequence.checks(["hello", "goodbye"])).toBe(false);
-        expect(numberSequence.checks("hello")).toBe(false);
-        expect(numberSequence.checks(null)).toBe(false);
-      });
     });
     describe("the objects type", () => {
       test("testing NORMAL object type", () => {
