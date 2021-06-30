@@ -1,6 +1,6 @@
 const Type = require("./TypeChecker");
 
-function type(typeDescription) {
+function type([typeDescription]) {
   return new Type(typeDescription);
 }
 
