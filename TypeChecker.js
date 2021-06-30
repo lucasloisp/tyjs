@@ -23,7 +23,7 @@ class Type {
   checks(value) {
     return this.typeTree.match(value, {
       classCheckers: (cls) => this.getClassCheckerFor(cls),
-      checkFunctions: this.checkFunctions
+      checkFunctions: this.checkFunctions,
     });
   }
 

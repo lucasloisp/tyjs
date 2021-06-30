@@ -264,16 +264,16 @@ function classType(className, generics = []) {
   });
 }
 
-function matchCheckFunctionType(value, ctx){
+function matchCheckFunctionType(value, ctx) {
   return ctx.checkFunctions[this.left](value);
 }
 
-function checkFunctionType(functionIndex){
-  return typeCreator(      {
-        type: "checkFunction",
-      left: functionIndex,
-      match: matchCheckFunctionType
-      });
+function checkFunctionType(functionIndex) {
+  return typeCreator({
+    type: "checkFunction",
+    left: functionIndex,
+    match: matchCheckFunctionType,
+  });
 }
 
 module.exports = {
@@ -303,5 +303,5 @@ module.exports = {
   objectsType,
   classType,
   times,
-  checkFunctionType
+  checkFunctionType,
 };
