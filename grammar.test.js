@@ -11,8 +11,12 @@ function expectToUnambiguouslyEvaluateTo(string, value) {
 
 function expectToBeASyntaxError(string) {
   const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
-  let { results: parseResult } = parser.feed(string);
-  expect(parseResult.length).toBe(0);
+  expect(() => {
+    let { results: parseResult } = parser.feed(string);
+    if (parseResult.length === 0) {
+      throw new Error();
+    }
+  }).toThrow();
 }
 
 describe("the language's grammar", () => {
@@ -288,7 +292,7 @@ describe("the language's grammar", () => {
         ])
       );
     });
-    test.skip("sequence of any can only go last", () => {
+    test("sequence of any can only go last", () => {
       expectToBeASyntaxError("[ ..., number]");
     });
   });
