@@ -234,9 +234,19 @@ function matchObjectTypes(obj) {
   return (allValuesInObjectMatch || this.isOpen) && allTypesMatch;
 }
 function objectsType(properties, isOpen) {
+  const properties2 = [];
+  for (const [prop, value, count] of properties) {
+    if (!count || count === "many") {
+      properties2.push([prop, value, count]);
+    } else {
+      for (let i = 0; i < count; i++) {
+        properties2.push([prop, value]);
+      }
+    }
+  }
   return typeCreator({
     type: "objects",
-    left: properties,
+    left: properties2,
     isOpen,
     match: matchObjectTypes,
   });

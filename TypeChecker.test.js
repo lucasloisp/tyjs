@@ -443,6 +443,27 @@ describe("the type checker", () => {
           })
         ).toBe(false);
       });
+      test("Trying decomposed limited regexes", () => {
+        const object = new Type("{ ...3 * /na+/: string, age: number }");
+        expect(object.checks({ banana: "Carlos", age: 44 })).toBe(false);
+        expect(
+          object.checks({
+            banana: "Carlos",
+            nanana: "Batman",
+            nama: "ste",
+            age: 44,
+          })
+        ).toBe(true);
+        expect(
+          object.checks({
+            banana: "Carlos",
+            nanana: "Batman",
+            nama: "ste",
+            nacl: "salt",
+            age: 44,
+          })
+        ).toBe(false);
+      });
     });
   });
   describe("the class type", () => {
