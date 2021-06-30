@@ -99,4 +99,12 @@ describe("the tyjs library", () => {
       );
     });
   });
+  describe("demand function", () => {
+    test("the demand function returns the same value", () => {
+      expect(type`number`.demand(1)).toBe(1);
+    });
+    test("the demand function returns a TypeError if it doesnt match", () => {
+      expect(() => type`number`.demand("throw")).toThrow(TypeError);
+    });
+  });
 });
