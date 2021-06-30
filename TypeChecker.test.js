@@ -338,7 +338,7 @@ describe("the type checker", () => {
         expect(numberSequence.checks("hello")).toBe(false);
         expect(numberSequence.checks(null)).toBe(false);
       });
-      test("sequences of a givn and then many anys", () => {
+      test("sequences of a given type and then many anys", () => {
         const numberSequence = new Type("[ number, ...]");
         expect(numberSequence.checks([4])).toBe(true);
         expect(numberSequence.checks([4, 4])).toBe(true);
@@ -350,17 +350,30 @@ describe("the type checker", () => {
         expect(numberSequence.checks("hello")).toBe(false);
         expect(numberSequence.checks(null)).toBe(false);
       });
-      test("sequences of a givn and then many anys", () => {
-        const numberSequence = new Type("[ number, ...]");
-        expect(numberSequence.checks([4])).toBe(true);
-        expect(numberSequence.checks([4, 4])).toBe(true);
-        expect(numberSequence.checks([1, "hello"])).toBe(true);
+      test("sequences of a fixed number of elements of a type", () => {
+        const numberSequence = new Type("[ ...3 * number ]");
+        expect(numberSequence.checks([4])).toBe(false);
+        expect(numberSequence.checks([4, 4])).toBe(false);
+        expect(numberSequence.checks([4, 4, 4])).toBe(true);
         expect(numberSequence.checks([])).toBe(false);
         expect(numberSequence.checks([1, 2, 3])).toBe(true);
-        expect(numberSequence.checks([1, "hello", "goodbye"])).toBe(true);
+        expect(numberSequence.checks([1, "hello", "goodbye"])).toBe(false);
         expect(numberSequence.checks(["hello", "goodbye"])).toBe(false);
         expect(numberSequence.checks("hello")).toBe(false);
         expect(numberSequence.checks(null)).toBe(false);
+      });
+      test("sequences of multiple element types", () => {
+        const sequence = new Type("[ string, ...3 * boolean, ...number, ... ]");
+        expect(sequence.checks([])).toBe(false);
+        expect(sequence.checks(["Alice"])).toBe(false);
+        expect(sequence.checks(["Alice", true])).toBe(false);
+        expect(sequence.checks(["Alice", true, false])).toBe(false);
+        expect(sequence.checks(["Alice", true, false, true])).toBe(true);
+        expect(sequence.checks(["Alice", true, false, true, 1, 2])).toBe(true);
+        expect(sequence.checks(["Alice", 1, true, false, true, 1])).toBe(false);
+        expect(sequence.checks([true, false, true, 1, 2])).toBe(false);
+        expect(sequence.checks(["Bob", true, false, true, 1, null])).toBe(true);
+        expect(sequence.checks(["Alice", true, false, true, null])).toBe(true);
       });
     });
   });

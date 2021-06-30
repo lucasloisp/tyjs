@@ -14,9 +14,9 @@ module.exports = moo.compile({
   Or: ["|"],
   SpecialNumber: ["Infinity", "NaN", "-Infinity", "+Infinity"],
   Hexadecimal: /[-+]?0x[a-fA-F\d]+/,
+  IntegerLiteral: /\d+ \*/,
   NumberLiteral:
     /[-+]?(?:(?:(?:\d+\.\d*)|(?:\d*\.?\d+))(?:e[+-]?\d+)?)|[-+]?\d+/,
-  IntegerLiteral: /\.\.\.\d+/,
   RegexLiteral: /\/.*\//,
   Minus: ["-"],
   LeftPar: ["("],
