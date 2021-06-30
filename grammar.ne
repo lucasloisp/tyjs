@@ -79,3 +79,4 @@ ATOMIC ->
   | %Class %Lt (AND %Comma _ {% id %}):* AND %Gt
     {% ([cls, _, tail, head]) => ty.classType(cls.value, [...tail, head]) %}
   | %Class {% ([fst]) => ty.classType(fst.value) %}
+  | %CustomFnChecker {% ([fst]) => ty.checkFunctionType(parseInt(fst.value.slice(1))) %}

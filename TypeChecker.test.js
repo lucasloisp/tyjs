@@ -622,4 +622,25 @@ describe("the class type", () => {
       }).toThrow("Syntax error");
     });
   });
+  describe("Custom checker functions", () => {
+    test("create TypeChecker using one custom checker function", () => {
+      const functionStartsWithYes = (value) =>
+        typeof value === "string" && value.startsWith("yes");
+      const customCheckerType = new Type("$0", [functionStartsWithYes]);
+      expect(customCheckerType.checks("yes! it works!")).toBe(true);
+      expect(customCheckerType.checks("nope")).toBe(false);
+    });
+    test("create TypeChecker using two custom checker function", () => {
+      const functionStartsWithThis = (value) =>
+        typeof value === "string" && value.startsWith("this");
+      const functionEndsWithIt = (value) =>
+        typeof value === "string" && value.endsWith("it");
+      const customCheckerType = new Type("$0 & $1", [
+        functionStartsWithThis,
+        functionEndsWithIt,
+      ]);
+      expect(customCheckerType.checks("this is it")).toBe(true);
+      expect(customCheckerType.checks("this is not")).toBe(false);
+    });
+  });
 });

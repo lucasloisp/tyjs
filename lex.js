@@ -45,4 +45,5 @@ module.exports = moo.compile({
   BooleanLiteral: /true|false/,
   Property: /[A-Za-z0-9_]+:/,
   Class: /[A-Z]\w*/,
+  CustomFnChecker: /\$\d+/,
 });

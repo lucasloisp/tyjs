@@ -33,6 +33,7 @@ describe("the language's grammar", () => {
       expectToUnambiguouslyEvaluateTo("byte", ty.byteType());
       expectToUnambiguouslyEvaluateTo("any", ty.anyType());
       expectToUnambiguouslyEvaluateTo("_", ty.anyType());
+      expectToUnambiguouslyEvaluateTo("$1", ty.checkFunctionType(1));
     });
   });
   describe("the operators", () => {

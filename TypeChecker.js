@@ -15,6 +15,7 @@ class Type {
     if (parseResult.length === 0) throw new Error("Syntax error");
     this.typeTree = parseResult[0];
     this.classCheckers = new Map();
+    this.checkFunctions = checkFunctions;
   }
 
   getClassCheckerFor(cls) {
@@ -28,6 +29,7 @@ class Type {
   checks(value) {
     return this.typeTree.match(value, {
       classCheckers: (cls) => this.getClassCheckerFor(cls),
+      checkFunctions: this.checkFunctions,
     });
   }
 
