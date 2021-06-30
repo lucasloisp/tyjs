@@ -566,10 +566,10 @@ describe("the type checker", () => {
   describe("Custom checker functions", () => {
     test("create TypeChecker using one custom checker function", () => {
       const functionStartsWithYes = (value) =>
-        typeof value === "string" && value.startsWith("yes") ? "" : "error!";
+        typeof value === "string" && value.startsWith("yes");
       const customCheckerType = new Type("$0", [functionStartsWithYes]);
-      expect(customCheckerType.checks("yes! it works!")).toBeFalsy();
-      expect(customCheckerType.checks("nope")).toBe("error!");
+      expect(customCheckerType.checks("yes! it works!")).toBe(true);
+      expect(customCheckerType.checks("nope")).toBe(false);
     });
     test("create TypeChecker using two custom checker function", () => {
       const functionStartsWithThis = (value) =>
