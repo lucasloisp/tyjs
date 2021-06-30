@@ -6,7 +6,13 @@ class Type {
 
   constructor(typeDescription, checkFunctions = []) {
     const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
-    const { results: parseResult } = parser.feed(typeDescription);
+    let parseResult;
+    try {
+      ({ results: parseResult } = parser.feed(typeDescription));
+    } catch (err) {
+      throw new Error("Syntax error");
+    }
+    if (parseResult.length === 0) throw new Error("Syntax error");
     this.typeTree = parseResult[0];
     this.classCheckers = new Map();
     this.checkFunctions = checkFunctions;

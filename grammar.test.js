@@ -240,7 +240,7 @@ describe("the language's grammar", () => {
       expectToUnambiguouslyEvaluateTo('"hello"', ty.valueType("hello"));
     });
   });
-  describe("the objects type", () => {
+  describe("the sequence type", () => {
     test("it can type homogeneous sequences", () => {
       expectToUnambiguouslyEvaluateTo(
         "[ ...number ]",

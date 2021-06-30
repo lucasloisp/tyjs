@@ -271,6 +271,25 @@ describe("the type checker", () => {
         expect(numberSequence.checks("hello")).toBe(false);
         expect(numberSequence.checks(null)).toBe(false);
       });
+      test("sets are sequences, with insertion order", () => {
+        const myTriple = new Type("[ number, string, boolean ]");
+        const rightOrderSet = new Set();
+        rightOrderSet.add(1);
+        rightOrderSet.add("hello");
+        rightOrderSet.add(true);
+        const wrongOrderSet = new Set();
+        wrongOrderSet.add(1);
+        wrongOrderSet.add(true);
+        wrongOrderSet.add("hello");
+        const fallShortSet = new Set();
+        fallShortSet.add(1);
+        fallShortSet.add("hello");
+        expect(myTriple.checks(new Set([1, "hello", true]))).toBe(true);
+        expect(myTriple.checks(rightOrderSet)).toBe(true);
+        expect(myTriple.checks(wrongOrderSet)).toBe(false);
+        expect(myTriple.checks(new Set())).toBe(false);
+        expect(myTriple.checks(fallShortSet)).toBe(false);
+      });
       test("tuples can be typed", () => {
         const numberSequence = new Type("[ string, bigint, number ]");
         expect(numberSequence.checks(["hello", 1n, 1])).toBe(true);
@@ -362,205 +381,245 @@ describe("the type checker", () => {
         expect(numberSequence.checks("hello")).toBe(false);
         expect(numberSequence.checks(null)).toBe(false);
       });
-      test("sequences of a givn and then many anys", () => {
-        const numberSequence = new Type("[ number, ...]");
-        expect(numberSequence.checks([4])).toBe(true);
-        expect(numberSequence.checks([4, 4])).toBe(true);
-        expect(numberSequence.checks([1, "hello"])).toBe(true);
-        expect(numberSequence.checks([])).toBe(false);
-        expect(numberSequence.checks([1, 2, 3])).toBe(true);
-        expect(numberSequence.checks([1, "hello", "goodbye"])).toBe(true);
-        expect(numberSequence.checks(["hello", "goodbye"])).toBe(false);
-        expect(numberSequence.checks("hello")).toBe(false);
-        expect(numberSequence.checks(null)).toBe(false);
-      });
-    });
-    describe("the objects type", () => {
-      test("testing NORMAL object type", () => {
-        const object = new Type("{ name: string, age: number }");
-        expect(object.checks({ name: "Esteban", age: 44 })).toBe(true);
-        expect(object.checks({ name: "Esteban", age: "44" })).toBe(false);
-        expect(object.checks({ name: "Esteban", age: 44, height: 13 })).toBe(
-          false
-        );
-        expect(object.checks("Esteban")).toBe(false);
-        expect(object.checks({})).toBe(false);
-        expect(object.checks({ age: 44, name: "Esteban" })).toBe(true);
-        expect(
-          object.checks([
-            ["age", 44],
-            ["name", "Esteban"],
-          ])
-        ).toBe(false);
-      });
-      test("testing decomposition in object", () => {
-        const object = new Type("{ name: string, age: number, ... }");
-        expect(object.checks({ name: "Carlos", age: 44 })).toBe(true);
-        expect(object.checks({ name: "Carlos", age: "44" })).toBe(false);
-        expect(
-          object.checks({ name: "Carlos", age: 44, height: "1,80", weight: 90 })
-        ).toBe(true);
-      });
-      test("Testing property with name given by regex", () => {
-        const object = new Type("{ /na+/: string, age: number }");
-        expect(object.checks({ ba: "Carlos", age: 44 })).toBe(false);
-        expect(object.checks({ na: "Carlos", age: 44 })).toBe(true);
-        expect(object.checks({ naaaaa: "Carlos", age: 44 })).toBe(true);
-        expect(object.checks({ naa: "Carlos", age: 44, naaa: "algo" })).toBe(
-          false
-        );
-      });
-      test("Test regex is a substring of the prop", () => {
-        const object = new Type("{ /na+/: string, age: number }");
-        expect(object.checks({ banana: "Carlos", age: 44 })).toBe(true);
-      });
-      test("Test regex in multiple parameters", () => {
-        const object = new Type("{ /na+/: string, /js+/: number }");
-        expect(object.checks({ banana: "Carlos", jsjsjs: 44 })).toBe(true);
-      });
-      test("Test all values have a match", () => {
-        const object = new Type("{ /n/: string, /na/: string }");
-        expect(object.checks({ banana: "Carlos", jsjsjs: 44 })).toBe(false);
-      });
-      test("Decomposed Regexes", () => {
-        const object = new Type("{ .../n/: string, /ba/: string }");
-        expect(
-          object.checks({
-            negro: "Carlos",
-            n: "Esteban",
-            numb: "Linkin park",
-            ba: "nanasplit",
-          })
-        ).toBe(true);
-        expect(object.checks({ ba: "nanasplit" })).toBe(true);
-        expect(
-          object.checks({
-            negro: "Carlos",
-            n: "Esteban",
-            numb: "Linkin park",
-            ba: "nanasplit",
-            oh: "no ohnononono",
-          })
-        ).toBe(false);
+      test("sequences of multiple element types", () => {
+        const sequence = new Type("[ string, ...3 * boolean, ...number, ... ]");
+        expect(sequence.checks([])).toBe(false);
+        expect(sequence.checks(["Alice"])).toBe(false);
+        expect(sequence.checks(["Alice", true])).toBe(false);
+        expect(sequence.checks(["Alice", true, false])).toBe(false);
+        expect(sequence.checks(["Alice", true, false, true])).toBe(true);
+        expect(sequence.checks(["Alice", true, false, true, 1, 2])).toBe(true);
+        expect(sequence.checks(["Alice", 1, true, false, true, 1])).toBe(false);
+        expect(sequence.checks([true, false, true, 1, 2])).toBe(false);
+        expect(sequence.checks(["Bob", true, false, true, 1, null])).toBe(true);
+        expect(sequence.checks(["Alice", true, false, true, null])).toBe(true);
       });
     });
   });
-  describe("the class type", () => {
-    test("basic js class", () => {
-      const dateClass = new Type("Date");
-      expect(dateClass.checks(new Date())).toBe(true);
-      expect(dateClass.checks(BigInt(2))).toBe(false);
-      expect(dateClass.checks(2)).toBe(false);
-    });
-    test("custom js class", () => {
-      const customClass = new Type("CustomClass");
-      class CustomClass {}
-      expect(customClass.checks(new CustomClass())).toBe(true);
-      expect(customClass.checks(new Date())).toBe(false);
-    });
-    test("custom function constructor", () => {
-      const customConstructorClass = new Type("CustomConstructor");
-      function CustomConstructor() {
-        this.test = "Hello";
-      }
-      expect(customConstructorClass.checks(new CustomConstructor())).toBe(true);
-      expect(customConstructorClass.checks(new Date())).toBe(false);
-    });
-    test("Array class with generic type", () => {
-      const arrayOfStringType = new Type("Array<string>");
-      expect(arrayOfStringType.checks(["test"])).toBe(true);
-      expect(arrayOfStringType.checks(["test", "test2"])).toBe(true);
-      expect(arrayOfStringType.checks(["test", 2])).toBe(false);
-      expect(arrayOfStringType.checks(4)).toBe(false);
-    });
-    test("Set class with generic type", () => {
-      const setOfStringType = new Type("Set<number>");
-      expect(setOfStringType.checks(new Set([1, 2, 1]))).toBe(true);
-      expect(setOfStringType.checks(new Set([1, "test", 1]))).toBe(false);
-      expect(setOfStringType.checks(["test", "test2"])).toBe(false);
-    });
-    test("Map class with generic type for key and values", () => {
-      const setOfStringType = new Type("Map<string, number>");
+  describe("the objects type", () => {
+    test("testing NORMAL object type", () => {
+      const object = new Type("{ name: string, age: number }");
+      expect(object.checks({ name: "Esteban", age: 44 })).toBe(true);
+      expect(object.checks({ name: "Esteban", age: "44" })).toBe(false);
+      expect(object.checks({ name: "Esteban", age: 44, height: 13 })).toBe(
+        false
+      );
+      expect(object.checks("Esteban")).toBe(false);
+      expect(object.checks({})).toBe(false);
+      expect(object.checks({ age: 44, name: "Esteban" })).toBe(true);
       expect(
-        setOfStringType.checks(
-          new Map([
-            ["one", 1],
-            ["two", 2],
-          ])
-        )
+        object.checks([
+          ["age", 44],
+          ["name", "Esteban"],
+        ])
+      ).toBe(false);
+    });
+    test("testing decomposition in object", () => {
+      const object = new Type("{ name: string, age: number, ... }");
+      expect(object.checks({ name: "Carlos", age: 44 })).toBe(true);
+      expect(object.checks({ name: "Carlos", age: "44" })).toBe(false);
+      expect(
+        object.checks({ name: "Carlos", age: 44, height: "1,80", weight: 90 })
       ).toBe(true);
-      expect(
-        setOfStringType.checks(
-          new Map([
-            [1, 1],
-            ["two", 2],
-          ])
-        )
-      ).toBe(false);
-      expect(
-        setOfStringType.checks(
-          new Map([
-            ["one", 1],
-            ["two", "2"],
-          ])
-        )
-      ).toBe(false);
-      expect(setOfStringType.checks(["test", "test2"])).toBe(false);
     });
-    test("generic custom box class", () => {
-      class Box {
-        constructor(value) {
-          this.value = value;
-        }
-      }
-      const numberBox = new Type("Box<number>");
-      numberBox.classChecker(Box, (box, args) => {
-        return args.length === 1 && args[0](box.value);
-      });
-      expect(numberBox.checks(new Box(1))).toBe(true);
-      expect(numberBox.checks(new Box("hello"))).toBe(false);
-      expect(numberBox.checks(1)).toBe(false);
-    });
-    test("generics on a class without a checker are errors", () => {
-      class ClassWithoutChecker {
-        constructor() {}
-      }
-      const numberBox = new Type("ClassWithoutChecker<number>");
-      expect(() => numberBox.checks(new ClassWithoutChecker(1))).toThrow(
-        "ClassWithoutChecker has no checking for generics"
+    test("Testing property with name given by regex", () => {
+      const object = new Type("{ /na+/: string, age: number }");
+      expect(object.checks({ ba: "Carlos", age: 44 })).toBe(false);
+      expect(object.checks({ na: "Carlos", age: 44 })).toBe(true);
+      expect(object.checks({ naaaaa: "Carlos", age: 44 })).toBe(true);
+      expect(object.checks({ naa: "Carlos", age: 44, naaa: "algo" })).toBe(
+        false
       );
     });
-    test("generics work in an inner type-node", () => {
-      class Box {
-        constructor(value) {
-          this.value = value;
-        }
-      }
-      const numberBox = new Type("Box<number> | number");
-      numberBox.classChecker(Box, (box, args) => {
-        return args.length === 1 && args[0](box.value);
-      });
-      expect(numberBox.checks(new Box(1))).toBe(true);
-      expect(numberBox.checks(new Box("hello"))).toBe(false);
-      expect(numberBox.checks(1)).toBe(true);
-      expect(numberBox.checks("hello")).toBe(false);
+    test("Test regex is a substring of the prop", () => {
+      const object = new Type("{ /na+/: string, age: number }");
+      expect(object.checks({ banana: "Carlos", age: 44 })).toBe(true);
     });
-    test("nested generic types", () => {
-      class Box {
-        constructor(value) {
-          this.value = value;
-        }
+    test("Test regex in multiple parameters", () => {
+      const object = new Type("{ /na+/: string, /js+/: number }");
+      expect(object.checks({ banana: "Carlos", jsjsjs: 44 })).toBe(true);
+    });
+    test("Test all values have a match", () => {
+      const object = new Type("{ /n/: string, /na/: string }");
+      expect(object.checks({ banana: "Carlos", jsjsjs: 44 })).toBe(false);
+    });
+    test("Decomposed Regexes", () => {
+      const object = new Type("{ .../n/: string, /ba/: string }");
+      expect(
+        object.checks({
+          negro: "Carlos",
+          n: "Esteban",
+          numb: "Linkin park",
+          ba: "nanasplit",
+        })
+      ).toBe(true);
+      expect(object.checks({ ba: "nanasplit" })).toBe(true);
+      expect(
+        object.checks({
+          negro: "Carlos",
+          n: "Esteban",
+          numb: "Linkin park",
+          ba: "nanasplit",
+          oh: "no ohnononono",
+        })
+      ).toBe(false);
+    });
+    test("Trying decomposed limited regexes", () => {
+      const object = new Type("{ ...3 * /na+/: string, age: number }");
+      expect(object.checks({ banana: "Carlos", age: 44 })).toBe(false);
+      expect(
+        object.checks({
+          banana: "Carlos",
+          nanana: "Batman",
+          nama: "ste",
+          age: 44,
+        })
+      ).toBe(true);
+      expect(
+        object.checks({
+          banana: "Carlos",
+          nanana: "Batman",
+          nama: "ste",
+          nacl: "salt",
+          age: 44,
+        })
+      ).toBe(false);
+    });
+  });
+});
+describe("the class type", () => {
+  test("basic js class", () => {
+    const dateClass = new Type("Date");
+    expect(dateClass.checks(new Date())).toBe(true);
+    expect(dateClass.checks(BigInt(2))).toBe(false);
+    expect(dateClass.checks(2)).toBe(false);
+  });
+  test("custom js class", () => {
+    const customClass = new Type("CustomClass");
+    class CustomClass {}
+    expect(customClass.checks(new CustomClass())).toBe(true);
+    expect(customClass.checks(new Date())).toBe(false);
+  });
+  test("custom function constructor", () => {
+    const customConstructorClass = new Type("CustomConstructor");
+    function CustomConstructor() {
+      this.test = "Hello";
+    }
+    expect(customConstructorClass.checks(new CustomConstructor())).toBe(true);
+    expect(customConstructorClass.checks(new Date())).toBe(false);
+  });
+  test("Array class with generic type", () => {
+    const arrayOfStringType = new Type("Array<string>");
+    expect(arrayOfStringType.checks(["test"])).toBe(true);
+    expect(arrayOfStringType.checks(["test", "test2"])).toBe(true);
+    expect(arrayOfStringType.checks(["test", 2])).toBe(false);
+    expect(arrayOfStringType.checks(4)).toBe(false);
+  });
+  test("Set class with generic type", () => {
+    const setOfStringType = new Type("Set<number>");
+    expect(setOfStringType.checks(new Set([1, 2, 1]))).toBe(true);
+    expect(setOfStringType.checks(new Set([1, "test", 1]))).toBe(false);
+    expect(setOfStringType.checks(["test", "test2"])).toBe(false);
+  });
+  test("Map class with generic type for key and values", () => {
+    const setOfStringType = new Type("Map<string, number>");
+    expect(
+      setOfStringType.checks(
+        new Map([
+          ["one", 1],
+          ["two", 2],
+        ])
+      )
+    ).toBe(true);
+    expect(
+      setOfStringType.checks(
+        new Map([
+          [1, 1],
+          ["two", 2],
+        ])
+      )
+    ).toBe(false);
+    expect(
+      setOfStringType.checks(
+        new Map([
+          ["one", 1],
+          ["two", "2"],
+        ])
+      )
+    ).toBe(false);
+    expect(setOfStringType.checks(["test", "test2"])).toBe(false);
+  });
+  test("generic custom box class", () => {
+    class Box {
+      constructor(value) {
+        this.value = value;
       }
-      const numberBox = new Type("Box<Box<number>>");
-      numberBox.classChecker(Box, (box, args) => {
-        return args.length === 1 && args[0](box.value);
-      });
-      expect(numberBox.checks(new Box(new Box(1)))).toBe(true);
-      expect(numberBox.checks(new Box(new Box("hello")))).toBe(false);
-      expect(numberBox.checks(new Box(1))).toBe(false);
-      expect(numberBox.checks(new Box("hello"))).toBe(false);
-      expect(numberBox.checks(1)).toBe(false);
-      expect(numberBox.checks("hello")).toBe(false);
+    }
+    const numberBox = new Type("Box<number>");
+    numberBox.classChecker(Box, (box, args) => {
+      return args.length === 1 && args[0](box.value);
+    });
+    expect(numberBox.checks(new Box(1))).toBe(true);
+    expect(numberBox.checks(new Box("hello"))).toBe(false);
+    expect(numberBox.checks(1)).toBe(false);
+  });
+  test("generics on a class without a checker are errors", () => {
+    class ClassWithoutChecker {
+      constructor() {}
+    }
+    const numberBox = new Type("ClassWithoutChecker<number>");
+    expect(() => numberBox.checks(new ClassWithoutChecker(1))).toThrow(
+      "ClassWithoutChecker has no checking for generics"
+    );
+  });
+  test("generics work in an inner type-node", () => {
+    class Box {
+      constructor(value) {
+        this.value = value;
+      }
+    }
+    const numberBox = new Type("Box<number> | number");
+    numberBox.classChecker(Box, (box, args) => {
+      return args.length === 1 && args[0](box.value);
+    });
+    expect(numberBox.checks(new Box(1))).toBe(true);
+    expect(numberBox.checks(new Box("hello"))).toBe(false);
+    expect(numberBox.checks(1)).toBe(true);
+    expect(numberBox.checks("hello")).toBe(false);
+  });
+  test("nested generic types", () => {
+    class Box {
+      constructor(value) {
+        this.value = value;
+      }
+    }
+    const numberBox = new Type("Box<Box<number>>");
+    numberBox.classChecker(Box, (box, args) => {
+      return args.length === 1 && args[0](box.value);
+    });
+    expect(numberBox.checks(new Box(new Box(1)))).toBe(true);
+    expect(numberBox.checks(new Box(new Box("hello")))).toBe(false);
+    expect(numberBox.checks(new Box(1))).toBe(false);
+    expect(numberBox.checks(new Box("hello"))).toBe(false);
+    expect(numberBox.checks(1)).toBe(false);
+    expect(numberBox.checks("hello")).toBe(false);
+  });
+  describe("Syntax errors", () => {
+    test("syntax errors throw", () => {
+      expect(() => {
+        const myType = new Type("!");
+      }).toThrow("Syntax error");
+      expect(() => {
+        const myType = new Type("!___number");
+      }).toThrow("Syntax error");
+      expect(() => {
+        const myType = new Type("number | | string");
+      }).toThrow("Syntax error");
+    });
+    test("a bogus string does not codify a type", () => {
+      expect(() => {
+        const numberBox = new Type("This is a bogus string");
+      }).toThrow("Syntax error");
     });
   });
   describe("Custom checker functions", () => {
