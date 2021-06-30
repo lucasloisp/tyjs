@@ -44,6 +44,9 @@ describe("the types in TyJS", () => {
     test("the any type", () => {
       expect(ty.anyType()).toMatchObject({ type: "any" });
     });
+    test("the checkFunction type", () => {
+      expect(ty.checkFunctionType(0)).toMatchObject({ type: "checkFunction", left: 0 });
+    });
   });
   describe("the type operators", () => {
     describe("the not operator", () => {

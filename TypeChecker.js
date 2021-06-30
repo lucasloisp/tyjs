@@ -9,6 +9,7 @@ class Type {
     const { results: parseResult } = parser.feed(typeDescription);
     this.typeTree = parseResult[0];
     this.classCheckers = new Map();
+    this.checkFunctions = checkFunctions;
   }
 
   getClassCheckerFor(cls) {
@@ -22,6 +23,7 @@ class Type {
   checks(value) {
     return this.typeTree.match(value, {
       classCheckers: (cls) => this.getClassCheckerFor(cls),
+      checkFunctions: this.checkFunctions
     });
   }
 
