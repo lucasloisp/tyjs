@@ -16,6 +16,8 @@ const naturals = type`int & ${v => v >= 0}`
 const threeDigit = new Type("number & /\\d{3}/");
 ```
 
+4. Have fun!
+
 
 ## Cambio en definición de funciones $n
 
