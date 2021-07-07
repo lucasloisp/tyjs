@@ -71,6 +71,7 @@ ATOMIC ->
   | SEQUENCE {% ([v]) => v %}
   | %Boolean {% () => ty.booleanType() %}
   | %Number {% () => ty.numberType() %}
+  | %Null {% () => ty.nullType() %}
   | %String {% () => ty.stringType() %}
   | %Function {% () => ty.functionType() %}
   | %Symbol {% () => ty.symbolType() %}

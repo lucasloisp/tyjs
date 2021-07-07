@@ -42,6 +42,14 @@ function bigintType() {
   return typeCreator({ type: "bigint" });
 }
 
+function matchValuesOnNullType(value) {
+  return value === null;
+}
+
+function nullType() {
+  return typeCreator({ type: "null", match: matchValuesOnNullType });
+}
+
 function matchValuesOnVoidType(value) {
   return value === null || value === undefined;
 }
@@ -313,4 +321,5 @@ module.exports = {
   classType,
   times,
   checkFunctionType,
+  nullType,
 };

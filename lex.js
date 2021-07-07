@@ -36,6 +36,7 @@ module.exports = moo.compile({
   Object: ["object"],
   BigInt: ["bigint"],
   Void: ["void"],
+  Null: ["null"],
   Int: ["int"],
   Double: ["double"],
   Char: ["char"],

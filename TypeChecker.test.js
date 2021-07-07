@@ -643,4 +643,12 @@ describe("the class type", () => {
       expect(customCheckerType.checks("this is not")).toBe(false);
     });
   });
+  describe("null type", () => {
+    test("matches the literal", () => {
+      const nullType = new Type("null");
+      expect(nullType.checks(null)).toBe(true);
+      expect(nullType.checks(undefined)).toBe(false);
+      expect(nullType.checks(true)).toBe(false);
+    });
+  });
 });
