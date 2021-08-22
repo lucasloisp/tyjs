@@ -1,27 +1,23 @@
 # TyJS
 
-## Cómo usar
+## Use Case
 
-1. `npm run grammar` para generar la gramática.
-2. `npm run test` para ejecutar la suite de tests.
-3. Se puede utilizar desde otro módulo npm instalando este como dependencia e
-   importando como:
+This module allows the definition of runtime type-checkers for you javascript
+project.
+For some example usages, check out the `index.test.js` file.
+
+## Developer Setup
+
+1. `npm run grammar` to generate the grammar parser.
+2. `npm run test` to execute the test suite.
+3. This module can be utilized from another project by importing it as such:
 
 ```javascript
-const { Type, type } = require('tyjs');
+const { Type, type } = require("tyjs");
 
-
-const naturals = type`int & ${v => v >= 0}`
+const naturals = type`int & ${(v) => v >= 0}`;
 
 const threeDigit = new Type("number & /\\d{3}/");
 ```
 
 4. Have fun!
-
-
-## Cambio en definición de funciones $n
-
-Las funciones $n, para mantener la lógica de los operators y cumplir con la
-firmas de `classChecker`, se redefine de la siguiente manera: Son funciones que
-reciben un valor y retornan _true_ si el chequeo es exitoso y _false_ en caso
-contrario.
