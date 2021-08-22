@@ -1,5 +1,8 @@
 # TyJS
 
+A runtime type-checker creation utility developed as part of our coursework in
+learning about formal languages.
+
 ## Use Case
 
 This module allows the definition of runtime type-checkers for you javascript
