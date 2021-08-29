@@ -1,4 +1,10 @@
-# TyJS
+<h1 align="center">
+  <img src="icons/tyjs.png" alt="TyJS" width="256" height="256"/><br>
+  TyJS
+  <!-- color: #d43359 -->
+</h1>
+
+<p align="center"><em>(pronounced "tie JS")</em></p>
 
 A runtime-type-checker creation utility developed as part of our coursework in
 learning about formal languages.
