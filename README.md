@@ -123,7 +123,7 @@ For custom types (or types other than `Array`, `Set` or `Map`) you can define
 your own criteria for generics by defining a "class checker".
 
 ```js
-const numberBox = new Type("Box<number>");
+const numberBox = type`Box<number>`;
 numberBox.classChecker(
   Box,
   (box, args) => args.length === 1 && args[0](box.value)
@@ -143,7 +143,7 @@ For this reason it is common to check that `args.length` matches what you
 expect.
 
 ```js
-const person = new Type("Person<string, number>");
+const person = type`Person<string, number>`;
 person.classChecker(
   Person,
   (person, args) =>
@@ -173,11 +173,11 @@ const epochAfterNow = type`number & ${(v) => v > now.getTime()}`;
 3. This module can be utilized from another project by importing it as such:
 
 ```js
-const { Type, type } = require("tyjs");
+const { type } = require("tyjs");
 
 const naturals = type`int & ${(v) => v >= 0}`;
 
-const threeDigit = new Type("number & /\\d{3}/");
+const threeDigit = type`number & /\\d{3}/`;
 ```
 
 4. Have fun!
