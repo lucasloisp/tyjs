@@ -114,14 +114,42 @@ syntax:
 ```js
 ["hello", "world"]    : Array<string>
 new Set([1, 2, 3])    : Set<number>
-new Map([["one", 1]]) : Set<number>
+new Map([["one", 1]]) : Map<string, number>
 ```
 
 ### Generics on your own types
 
-Coming soon.
+For custom types (or types other than `Array`, `Set` or `Map`) you can define
+your own criteria for generics by defining a "class checker".
 
-<!-- TODO -->
+```js
+const numberBox = new Type("Box<number>");
+numberBox.classChecker(
+  Box,
+  (box, args) => args.length === 1 && args[0](box.value)
+);
+```
+
+These require the class constructor (i.e. `Box`) and a function that receives
+
+1. a value of that type (`Box`)
+2. and the `args` array, which has a checker function for each of the generic
+   types.
+
+A box has only one type parameter that makes sense, the value contained in the
+box.
+Maps have two (key and value).
+For this reason it is common to check that `args.length` matches what you
+expect.
+
+```js
+const person = new Type("Person<string, number>");
+person.classChecker(
+  Person,
+  (person, args) =>
+    args.length === 2 && args[0](person.name) && args[1](person.age)
+);
+```
 
 ### Checker functions
 
