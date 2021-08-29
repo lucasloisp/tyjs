@@ -162,7 +162,8 @@ place of some `type` that return a boolean.
 ```js
 const nonNegativeNumber = type`number & ${(v) => v >= 0}`;
 const even = type`number & ${(v) => v % 2 == 0}`;
-const epochAfterNow = type`number & ${(v) => v > new Date().getTime()}`;
+const now = new Date();
+const epochAfterNow = type`number & ${(v) => v > now.getTime()}`;
 ```
 
 ## Developer Setup
