@@ -45,8 +45,7 @@ in [0]
 in [false, 17, "hello"]
 ```
 
-The values inside the array can be any imaginable, as it is parsed as a JSON
-array.
+The values inside the array can be any JSON-valid value.
 
 Finally, regular expressions can be used to match any value whose string
 representation matches that expression.
@@ -55,11 +54,10 @@ representation matches that expression.
 
 A sequence can be typed in several ways.
 
-- `[ ...number ]` defines sequence of 0-or-more values of type `number`.
-- `[ ... ]` defines sequence of 0-or-more values of any type.
-- `[ ...3 * number ]` defines sequence of 3 numbers, i.e. a triple.
-- `[ number, ...3 * byte ]` defines sequence of a number followed by 3 bytes.
-- `[ number, ...3 * byte ]` defines sequence of a number followed by 3 bytes.
+- `[ ...number ]` defines a sequence of 0+ values of type `number`.
+- `[ ...3 * number ]` defines a sequence of 3 numbers, i.e. a triple.
+- `[ number, ...3 * byte ]` defines a sequence of a number followed by 3 bytes.
+- `[ ... ]` defines sequence of 0+ values of any type.
 - Note that the sequence of `any`s can only go last (i.e. `[ ..., number ]` is
   an invalid type).
 
@@ -80,8 +78,8 @@ Object have similar ways of being defined.
 - `{ name: string, age: number, ... }` has two required properties but can
   contain any other number of additional ones, typed at will.
 
-Regexes can be used to describe the name of a property, but again, only one
-matching property is allowed.
+Regular Expressions can be used to describe the name of a property, but again,
+only one matching property is allowed by default.
 
 - `{ /na+/: string, age: number }` would match `{ na: "Alice", age: 44}`.
 - But not `{ na: "Alice", age: 44, naa: "Bob" }`.
@@ -91,16 +89,14 @@ matching property is allowed.
 
 ### Operators
 
-The following operators on the base types are defined to add expressivity to type
-definitions.
+The following operators on the base types are defined to add expressivity to
+type definitions.
 
-- `!type`, allows for matching any value that does **not** match `type`.
-- `type & type`, allows for matching any value that matches both types.
-- `type | type`, allows for matching any value that matches either type.
-- `type - type`, allows for matching any value that matches the first type
+- `!type`, allows for any value that does **not** match `type`.
+- `type & type`, allows for any value that matches both types.
+- `type | type`, allows for any value that matches either type.
+- `type - type`, allows for any value that matches the first type
   without matching the second.
-- `type || type`, allows for matching any value that matches either type.
-- `type || type`, allows for matching any value that matches either type.
 
 ### Custom Classes
 
