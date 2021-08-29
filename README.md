@@ -153,9 +153,17 @@ person.classChecker(
 
 ### Checker functions
 
-Coming soon.
+For any other criteria you might have (value ranges, a type depending on the
+context, ...), you should use checker functions.
 
-<!-- TODO -->
+By using class literals, you write these out by interpolating unary functions in
+place of some `type` that return a boolean.
+
+```js
+const nonNegativeNumber = type`number & ${(v) => v >= 0}`;
+const even = type`number & ${(v) => v % 2 == 0}`;
+const epochAfterNow = type`number & ${(v) => v > new Date().getTime()}`;
+```
 
 ## Developer Setup
 
