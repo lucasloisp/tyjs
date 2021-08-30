@@ -1,7 +1,9 @@
 <h1 align="center">
   <img src="icons/tyjs.png" alt="TyJS" width="256" height="256"/><br>
   TyJS
-  <!-- color: #d43359 -->
+  <!-- tyjs color: #d43359 -->
+  <!-- ts color: #3178c6 -->
+  <!-- js color: #f7df1e -->
 </h1>
 
 <p align="center"><em>(pronounced "tie JS")</em></p>
