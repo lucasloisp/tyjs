@@ -1,0 +1,8 @@
+.github/
+.idea/
+icons/
+coverage/
+tests/
+*.test.js
+.prettierrc
+grammar.ne
