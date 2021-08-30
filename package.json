@@ -1,6 +1,6 @@
 {
   "name": "tyjs",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "dependencies": {
@@ -19,6 +19,10 @@
     "grammar": "nearleyc grammar.ne -o grammar.js",
     "grammar-watch": "onchange \"grammar.ne\" -- npm run grammar"
   },
-  "author": "",
+  "author": "Lucas Lois <lucasloisp@gmail.com>",
+  "contributors": [
+    "aparedes1998 <37920222+aparedes1998@users.noreply.github.com>",
+    "Rodrigo Pérez <rodripf@gmail.com>"
+  ],
   "license": "ISC"
 }
