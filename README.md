@@ -181,7 +181,7 @@ const epochAfterNow = type`number & ${(v) => v > now.getTime()}`;
 3. This module can be utilized from another project by importing it as such:
 
 ```js
-const { type } = require("ty-js");
+const { type } = require("tyjs-check");
 
 const naturals = type`int & ${(v) => v >= 0}`;
 
