@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="icons/tyjs.png" alt="TyJS" width="256" height="256"/><br>
+  <img src="https://raw.githubusercontent.com/lucasloisp/tyjs/main/icons/tyjs.png" alt="TyJS" width="256" height="256"/><br>
   TyJS
   <!-- tyjs color: #d43359 -->
   <!-- ts color: #3178c6 -->
