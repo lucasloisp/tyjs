@@ -1,6 +1,6 @@
 const Type = require("./TypeChecker");
 
-function type(typeDescriptionParts, ...f) {
+function tyjs(typeDescriptionParts, ...f) {
   if (!f.every((value) => typeof value === "function")) {
     throw new Error("Interpolated value is not a function");
   }
@@ -17,7 +17,4 @@ function type(typeDescriptionParts, ...f) {
   return new Type(typeDescription, f);
 }
 
-module.exports = {
-  type,
-  Type,
-};
+module.exports = tyjs;

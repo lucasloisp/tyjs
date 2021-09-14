@@ -1,9 +1,9 @@
-const { type } = require("./index.js");
+const tyjs = require("./index.js");
 
 describe("the tyjs library", () => {
   describe("checking for types", () => {
     test("a three digit number type", () => {
-      const threeDigitNumberType = type`number & /\\d{3}/`;
+      const threeDigitNumberType = tyjs`number & /\\d{3}/`;
       for (let i = 100; i < 1000; i++) {
         expect(threeDigitNumberType.checks(i)).toBe(true);
       }
@@ -21,7 +21,7 @@ describe("the tyjs library", () => {
           this.grade = grade;
         }
       }
-      const studentType = type`Student<string>`;
+      const studentType = tyjs`Student<string>`;
       studentType.classChecker(Student, (studentValue, args) => {
         const [gradeType] = args;
         return args.length === 1 && gradeType(studentValue.grade);
@@ -43,7 +43,7 @@ describe("the tyjs library", () => {
         this.values = values;
       }
     }
-    const numberType = type`["boxed", Box<number | FixedLengthArray<4>>] | ["unboxed", number]`;
+    const numberType = tyjs`["boxed", Box<number | FixedLengthArray<4>>] | ["unboxed", number]`;
     numberType.classChecker(Box, (box, args) => {
       const [valueType] = args;
       return args.length === 1 && valueType(box.value);
@@ -74,18 +74,18 @@ describe("the tyjs library", () => {
 
   describe("type tag temlates functionality", () => {
     test("no interpolation present", () => {
-      let numberType = type`number`;
+      let numberType = tyjs`number`;
       expect(numberType.checks(1)).toBe(true);
       expect(numberType.checks("not")).toBe(false);
     });
     test("one interpolation function", () => {
-      let numberType = type`number & ${(v) => v >= 0}`;
+      let numberType = tyjs`number & ${(v) => v >= 0}`;
       expect(numberType.checks(1)).toBe(true);
       expect(numberType.checks("not")).toBe(false);
       expect(numberType.checks(-1)).toBe(false);
     });
     test("multiple interpolation function", () => {
-      let numberType = type`number & ${(v) => v >= 0} & int & ${(v) => v <= 6}`;
+      let numberType = tyjs`number & ${(v) => v >= 0} & int & ${(v) => v <= 6}`;
       expect(numberType.checks(1)).toBe(true);
       expect(numberType.checks("not")).toBe(false);
       expect(numberType.checks(-1)).toBe(false);
@@ -94,17 +94,17 @@ describe("the tyjs library", () => {
       expect(numberType.checks(0)).toBe(true);
     });
     test("interpolated value is not a function", () => {
-      expect(() => type`number & ${"not a function"}`).toThrow(
+      expect(() => tyjs`number & ${"not a function"}`).toThrow(
         "Interpolated value is not a function"
       );
     });
   });
   describe("demand function", () => {
     test("the demand function returns the same value", () => {
-      expect(type`number`.demand(1)).toBe(1);
+      expect(tyjs`number`.demand(1)).toBe(1);
     });
     test("the demand function returns a TypeError if it doesnt match", () => {
-      expect(() => type`number`.demand("throw")).toThrow(TypeError);
+      expect(() => tyjs`number`.demand("throw")).toThrow(TypeError);
     });
   });
 });
