@@ -12,6 +12,10 @@
     "onchange": "^7.1.0",
     "prettier": "^2.3.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucasloisp/tyjs/"
+  },
   "scripts": {
     "test": "jest",
     "format": "prettier --write ./*.js",
