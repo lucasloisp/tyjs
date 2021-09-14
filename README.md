@@ -40,7 +40,7 @@ The following primitive types are supported out of the box.
 - `double`, which matches numbers, that are **not** `int`.
 - `char`, will match any single-character string.
 - `byte`, will match whole numbers from 0 to 255.
-- `any`, matching any value at all.
+- `any` (or `_`), matching any value at all.
 - `symbol` (for any JS `Symbol` value).
 - literal values too, like `17`, `true` or `"hello"` (with quotations), match
   themselves.
